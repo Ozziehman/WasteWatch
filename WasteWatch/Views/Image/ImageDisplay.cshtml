@@ -3,13 +3,22 @@
 @if (Model != null && Model.ImageData != null)
 {
     <img id="sourceImage" src="data:image/jpeg;base64,@Convert.ToBase64String(Model.ImageData)" alt="@Model.ImageName" style="display: none;" />
+    <div id="imageName" style="display:none;">@Model.ImageName</div>
 }
 
 <canvas id="skiaCanvas" width="800" height="600"></canvas>
 <input type="text" id="boxName" style="display: none;" />
 <button id="saveBoxButton" style="display: none;">Save Box</button>
 
+
 <div id="OverviewContainer">
     <h1>Overview</h1>
     <div id="overview"></div>
+
+    <div id="downloadDiv">
+        <div class="btn" id="downloadButton">Download</div>
+    </div>
 </div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>

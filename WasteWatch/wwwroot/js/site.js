@@ -1,5 +1,6 @@
 ﻿var canvas = document.getElementById('skiaCanvas');
 var image = document.getElementById('sourceImage');
+var imageName = document.getElementById('imageName');
 var ctx = canvas.getContext('2d');
 var isDragging = false;
 var startX, startY, endX, endY;
@@ -7,7 +8,9 @@ var img = new Image();
 var boxNameInput = document.getElementById('boxName');
 var saveBoxButton = document.getElementById('saveBoxButton');
 var overview = document.getElementById('overview');
+var downloadButton = document.getElementById('downloadButton');
 var boxes = [];
+var dataToDownload = [];
 
 if (canvas && image) {
     img.src = image.src;
@@ -43,7 +46,7 @@ saveBoxButton.addEventListener("click", function () {
     let boxName = boxNameInput.value;
     if (boxName) {
         boxes.push({ startX, startY, endX, endY, name: boxName });
-
+        dataToDownload.push({ name: boxName, startX, startY, endX, endY })
         // Log the coordinates
         console.log("Box Coordinates: startX=" + startX + ", startY=" + startY + ", endX=" + endX + ", endY=" + endY);
         console.log("Box Name: " + boxName);
@@ -55,6 +58,41 @@ saveBoxButton.addEventListener("click", function () {
         saveBoxButton.style.display = 'none';
     }
 });
+
+//IMPORTANT:
+// Include the jszip library in your HTML
+// <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
+
+downloadButton.addEventListener("click", function () {
+    const jsZip = new JSZip();
+
+    dataToDownload.forEach((item, index) => {
+        const textContent = `name: ${item.name}, startX: ${item.startX}, startY: ${item.startY}, endX: ${item.endX}, endY: ${item.endY}`;
+        jsZip.file(`data_${index}.txt`, textContent);
+    });
+
+    jsZip.generateAsync({ type: "blob" })
+        .then(function (blob) {
+            const zipFile = new Blob([blob], { type: 'application/zip' });
+
+            // Create a temporary URL for the zip file
+            const blobURL = URL.createObjectURL(zipFile);
+
+            // Create a temporary link element to trigger the download
+            const a = document.createElement('a');
+            a.href = blobURL;
+            a.download = 'data.zip';
+
+            // Simulate a click on the link to trigger the download
+            a.click();
+
+            // Clean up by revoking the blob URL
+            URL.revokeObjectURL(blobURL);
+        });
+});
+
+
+
 
 function clearCanvas() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -89,36 +127,41 @@ function drawBox(box) {
 function updateOverview() {
     // Clear the overview
     overview.innerHTML = '';
+  
 
     // Create an overview of all boxes
     boxes.forEach(function (box, index) {
-        var boxDiv = document.createElement('div');
-        boxDiv.classList.add('overview-box'); // Add both 'btn' and 'overview-box' classes
-        boxDiv.textContent = 'Box ' + (index + 1) + ': ' + box.name;
+        var boxContainer = document.createElement('div');
+        boxContainer.classList.add('box-container');
 
-        // Create a delete button
+        var boxDiv = document.createElement('div');
+        boxDiv.classList.add('overview-box');
+
+        var boxInfo = document.createElement('span');
+        boxInfo.textContent = 'Box ' + (index + 1) + ': ' + box.name;
+
         var deleteButton = document.createElement('button');
         deleteButton.classList.add('btn-danger', 'btn');
         deleteButton.textContent = 'Delete';
-        deleteButton.addEventListener('click', function () {
+        deleteButton.addEventListener('click', function (event) {
+            event.stopPropagation(); // Stop event propagation
             // Handle click on the delete button to delete the box
             deleteBox(index);
         });
 
-        // Append the delete button to the overview box
-        boxDiv.appendChild(deleteButton);
+        boxDiv.appendChild(boxInfo);
+        boxContainer.appendChild(boxDiv);
+        boxContainer.appendChild(deleteButton);
 
-        // Add a click event to the boxDiv for editing
-        boxDiv.addEventListener('click', function () {
-            // Handle click on the overview box to edit it
+        boxContainer.addEventListener('click', function () {
+            // Handle click on the boxContainer for editing
             editBox(index);
         });
 
-        // Append the overview box to the overview container
-        overview.appendChild(boxDiv);
+        // Append the boxContainer to the overview
+        overview.appendChild(boxContainer);
     });
 }
-
 
 function deleteBox(index) {
     // Remove the box from the 'boxes' array
@@ -139,6 +182,9 @@ function editBox(index) {
         boxes.forEach(drawBox);
         updateOverview();
     }
+}
+
+function downloadData() {
 }
 
 // Initial update of the overview

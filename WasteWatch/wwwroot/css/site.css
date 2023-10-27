@@ -26,7 +26,10 @@ body {
     overflow-y: scroll;
     max-height:60%;
     top: 20%;
+    width:20%;
     right: 10%;
+    text-align: center;
+    padding-bottom: 15px;
 }
 
 #overview {
@@ -45,8 +48,23 @@ body {
     text-align: center;
     margin-bottom: 5px;
     margin-right: 10px;
+    flex: 1;
 }
 
     .overview-box:hover {
         background-color: grey;
     }
+
+.box-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+#downloadDiv {
+    text-align: center;
+}
+
+.btn-danger {
+    margin-left: 10px;
+}
