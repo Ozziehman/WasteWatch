@@ -1,7 +1,76 @@
 ﻿@model ImageModel
 
-@if (Model != null && Model.ImageData != null)
-{
     <h2>Uploaded Image:</h2>
-    <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model.ImageData)" alt="@Model.ImageName" />
-}
+    @if (Model != null && Model.ImageData != null)
+    {
+        <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model.ImageData)" alt="@Model.ImageName" />
+    }
+
+    <canvas id="skiaCanvas" width="800" height="600"></canvas>
+
+    <script>
+        var canvas = document.getElementById("skiaCanvas");
+        var ctx = canvas.getContext("2d");
+
+        var isDragging = false;
+        var startX, startY, endX, endY;
+
+        canvas.addEventListener("mousedown", function (e) {
+            isDragging = true;
+            startX = e.clientX - canvas.getBoundingClientRect().left;
+            startY = e.clientY - canvas.getBoundingClientRect().top;
+        });
+
+        canvas.addEventListener("mousemove", function (e) {
+            if (isDragging) {
+                endX = e.clientX - canvas.getBoundingClientRect().left;
+                endY = e.clientY - canvas.getBoundingClientRect().top;
+                drawSelectionBox();
+            }
+        });
+
+        canvas.addEventListener("mouseup", function () {
+            isDragging = false;
+            clearCanvas();
+
+            // Send an AJAX request to the controller with the coordinates.
+            var data = {
+                startX: startX,
+                startY: startY,
+                endX: endX,
+                endY: endY
+            };
+
+            // Use a library like Axios or the built-in fetch API to make the request.
+            fetch('/Image/logcoordinates', {
+                method: 'POST',
+                body: JSON.stringify(data),
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+                .then(response => {
+                    if (response.ok) {
+                        console.log('Coordinates logged successfully.');
+                    } else {
+                        console.error('Failed to log coordinates.');
+                    }
+                })
+                .catch(error => {
+                    console.error('An error occurred:', error);
+                });
+        });
+
+        function drawSelectionBox() {
+            clearCanvas();
+            ctx.strokeStyle = "blue";
+            ctx.lineWidth = 2;
+            ctx.strokeRect(startX, startY, endX - startX, endY - startY);
+        }
+
+        function clearCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+
+    </script>
