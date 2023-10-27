@@ -2,6 +2,14 @@
 
 @if (Model != null && Model.ImageData != null)
 {
-    <h2>Uploaded Image:</h2>
-    <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model.ImageData)" alt="@Model.ImageName" />
+    <img id="sourceImage" src="data:image/jpeg;base64,@Convert.ToBase64String(Model.ImageData)" alt="@Model.ImageName" style="display: none;" />
 }
+
+<canvas id="skiaCanvas" width="800" height="600"></canvas>
+<input type="text" id="boxName" style="display: none;" />
+<button id="saveBoxButton" style="display: none;">Save Box</button>
+
+<div id="OverviewContainer">
+    <h1>Overview</h1>
+    <div id="overview"></div>
+</div>
