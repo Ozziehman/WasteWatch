@@ -1,0 +1,7 @@
+﻿@model ImageModel
+
+@if (Model != null && Model.ImageData != null)
+{
+    <h2>Uploaded Image:</h2>
+    <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model.ImageData)" alt="@Model.ImageName" />
+}
