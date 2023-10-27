@@ -1,4 +1,5 @@
-﻿var canvas = document.getElementById('skiaCanvas');
+﻿// Get references to various HTML elements
+var canvas = document.getElementById('skiaCanvas');
 var image = document.getElementById('sourceImage');
 var imageName = document.getElementById('imageName');
 var ctx = canvas.getContext('2d');
@@ -6,25 +7,30 @@ var isDragging = false;
 var startX, startY, endX, endY;
 var img = new Image();
 var boxNameInput = document.getElementById('boxName');
-var saveBoxButton = document.getElementById('saveBoxButton');
+var saveBoxButton = document.getElementById('button-addon2');
 var overview = document.getElementById('overview');
 var downloadButton = document.getElementById('downloadButton');
-var boxes = [];
-var dataToDownload = [];
+var boxes = []; // array of boxes with the format {name, startX, startY, endX, endY}
+var dataToDownload = []; // array of boxes with the format {name, startX, startY, endX, endY}
 
+// Check if the canvas and image elements exist
 if (canvas && image) {
+    // Set the image source and draw it on the canvas when it loads
     img.src = image.src;
     img.onload = function () {
         ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
     };
 }
 
+// Event listener for when the mouse button is pressed on the canvas
 canvas.addEventListener("mousedown", function (e) {
     isDragging = true;
+    // Start drawing the selection box
     startX = e.clientX - canvas.getBoundingClientRect().left;
     startY = e.clientY - canvas.getBoundingClientRect().top;
 });
 
+// Event listener for when the mouse is moved over the canvas
 canvas.addEventListener("mousemove", function (e) {
     if (isDragging) {
         endX = e.clientX - canvas.getBoundingClientRect().left;
@@ -35,6 +41,7 @@ canvas.addEventListener("mousemove", function (e) {
     }
 });
 
+// Event listener for when the mouse button is released on the canvas
 canvas.addEventListener("mouseup", function () {
     isDragging = false;
     boxNameInput.style.display = 'block';
@@ -42,35 +49,44 @@ canvas.addEventListener("mouseup", function () {
     boxNameInput.focus();
 });
 
+// Event listener for the "Save Box" button
 saveBoxButton.addEventListener("click", function () {
     let boxName = boxNameInput.value;
     if (boxName) {
-        boxes.push({ startX, startY, endX, endY, name: boxName });
-        dataToDownload.push({ name: boxName, startX, startY, endX, endY })
+        let box = {
+            name: boxName,
+            startX: startX,
+            startY: startY,
+            endX: endX,
+            endY: endY
+        };
+        boxes.push(box);
+        dataToDownload.push(box);
         // Log the coordinates
         console.log("Box Coordinates: startX=" + startX + ", startY=" + startY + ", endX=" + endX + ", endY=" + endY);
         console.log("Box Name: " + boxName);
 
+        // Redraw all boxes on the canvas
         clearCanvas();
         boxes.forEach(drawBox);
         updateOverview();
+
         boxNameInput.style.display = 'none';
         saveBoxButton.style.display = 'none';
     }
 });
 
-//IMPORTANT:
-// Include the jszip library in your HTML
-// <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
-
+// Event listener for the "Download" button
 downloadButton.addEventListener("click", function () {
     const jsZip = new JSZip();
 
+    // Create text files with box data inside a zip file
     dataToDownload.forEach((item, index) => {
         const textContent = `name: ${item.name}, startX: ${item.startX}, startY: ${item.startY}, endX: ${item.endX}, endY: ${item.endY}`;
         jsZip.file(`data_${index}.txt`, textContent);
     });
 
+    // Generate and trigger the download of the zip file
     jsZip.generateAsync({ type: "blob" })
         .then(function (blob) {
             const zipFile = new Blob([blob], { type: 'application/zip' });
@@ -91,15 +107,14 @@ downloadButton.addEventListener("click", function () {
         });
 });
 
-
-
-
+// Function to clear the canvas
 function clearCanvas() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
     boxes.forEach(drawBox);
 }
 
+// Function to draw the selection box
 function drawSelectionBox() {
     ctx.strokeStyle = 'blue';
     ctx.lineWidth = 2;
@@ -108,6 +123,7 @@ function drawSelectionBox() {
     ctx.strokeRect(startX, startY, width, height);
 }
 
+// Function to draw a box with a name
 function drawBox(box) {
     ctx.strokeStyle = 'red';
     ctx.lineWidth = 2;
@@ -115,8 +131,7 @@ function drawBox(box) {
     let height = box.endY - box.startY;
     ctx.strokeRect(box.startX, box.startY, width, height);
 
-    // Draw a filled rectangle as a button-like label
-    ctx.fillStyle = 'white'; // Background color for the label
+    ctx.fillStyle = 'white';
     ctx.fillRect(box.startX, box.startY - 25, ctx.measureText(box.name).width + 10, 25);
 
     ctx.font = "16px Arial";
@@ -124,10 +139,10 @@ function drawBox(box) {
     ctx.fillText(box.name, box.startX + 5, box.startY - 5);
 }
 
+// Function to update the overview of boxes
 function updateOverview() {
     // Clear the overview
     overview.innerHTML = '';
-  
 
     // Create an overview of all boxes
     boxes.forEach(function (box, index) {
@@ -163,15 +178,17 @@ function updateOverview() {
     });
 }
 
+// Function to delete a box
 function deleteBox(index) {
     // Remove the box from the 'boxes' array
     boxes.splice(index, 1);
-
+    dataToDownload.splice(index, 1);
     // Redraw the canvas and update the overview
     clearCanvas();
     updateOverview();
 }
 
+// Function to edit a box's name
 function editBox(index) {
     // You can implement the box editing logic here, for example:
     var editedBox = boxes[index];
@@ -182,9 +199,6 @@ function editBox(index) {
         boxes.forEach(drawBox);
         updateOverview();
     }
-}
-
-function downloadData() {
 }
 
 // Initial update of the overview
