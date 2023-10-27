@@ -13,6 +13,8 @@ var downloadButton = document.getElementById('downloadButton');
 var boxes = []; // array of boxes with the format {name, startX, startY, endX, endY}
 var dataToDownload = []; // array of boxes with the format {name, startX, startY, endX, endY}
 
+
+
 // Check if the canvas and image elements exist
 if (canvas && image) {
     // Set the image source and draw it on the canvas when it loads
@@ -112,6 +114,7 @@ function clearCanvas() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
     boxes.forEach(drawBox);
+    console.log("Cleared canvas")
 }
 
 // Function to draw the selection box
@@ -168,10 +171,10 @@ function updateOverview() {
         boxContainer.appendChild(boxDiv);
         boxContainer.appendChild(deleteButton);
 
-        boxContainer.addEventListener('click', function () {
+        /*boxContainer.addEventListener('click', function () {
             // Handle click on the boxContainer for editing
             editBox(index);
-        });
+        });*/
 
         // Append the boxContainer to the overview
         overview.appendChild(boxContainer);
@@ -189,8 +192,7 @@ function deleteBox(index) {
 }
 
 // Function to edit a box's name
-function editBox(index) {
-    // You can implement the box editing logic here, for example:
+/*function editBox(index) {
     var editedBox = boxes[index];
     var newName = prompt("Edit the box name:");
     if (newName !== null) {
@@ -200,6 +202,6 @@ function editBox(index) {
         updateOverview();
     }
 }
-
+*/
 // Initial update of the overview
 updateOverview();
