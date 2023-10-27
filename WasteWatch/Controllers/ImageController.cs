@@ -34,15 +34,5 @@ namespace WasteWatch.Controllers
 
             return View("Index");
         }
-
-        [HttpPost]
-        public IActionResult LogCoordinates(int startX, int startY, int endX, int endY)
-        {
-            // Log the coordinates to your desired location (e.g., database, file, etc.).
-            // You can access the coordinates as parameters in this action.
-            // Example: Log to the console for demonstration purposes.
-            Console.WriteLine($"StartX: {startX}, StartY: {startY}, EndX: {endX}, EndY: {endY}");
-            return Ok(); // Return a response indicating success.
-        }
     }
 }

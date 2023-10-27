@@ -7,8 +7,11 @@
 }
 
 <canvas id="skiaCanvas" width="800" height="600"></canvas>
-<input type="text" id="boxName" style="display: none;" />
-<button id="saveBoxButton" style="display: none;">Save Box</button>
+
+<div class= "input-group mb-3">
+    <input type="text" class="form-control" id="boxName" style="display: none;" placeholder="Box name" aria-label="Recipient's username" aria-describedby="button-addon2">
+    <button class="btn btn-primary" type="button" id="button-addon2" style="display: none;">Save Box</button>
+</div>
 
 
 <div id="OverviewContainer">
@@ -16,9 +19,10 @@
     <div id="overview"></div>
 
     <div id="downloadDiv">
-        <div class="btn" id="downloadButton">Download</div>
+        <div class="btn btn-primary" id="downloadButton">Download</div>
     </div>
 </div>
+
 
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
