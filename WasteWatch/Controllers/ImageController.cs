@@ -47,8 +47,46 @@ namespace WasteWatch.Controllers
 
             // Store the JSON representation in session
             session.SetString("ImageModels", jsonImageModels);
+            session.SetString("CurrentIndex", "0");
 
             return View("ImageDisplay");
+        }
+
+        //Next image
+        public IActionResult NextImagePage([FromServices] IHttpContextAccessor httpContextAccessor)
+        {
+
+            // Get the current session
+            var session = httpContextAccessor.HttpContext.Session;
+
+            int currentIndex = Int32.Parse(session.GetString("CurrentIndex"));
+            int nextIndex = currentIndex + 1;
+            session.SetString("CurrentIndex", nextIndex.ToString());
+
+            return View("ImageDisplay");
+        }
+
+        public IActionResult PreviousImagePage([FromServices] IHttpContextAccessor httpContextAccessor)
+        {
+
+            // Get the current session
+            var session = httpContextAccessor.HttpContext.Session;
+
+            int currentIndex = Int32.Parse(session.GetString("CurrentIndex"));
+            int previousIndex = currentIndex - 1;
+            session.SetString("CurrentIndex", previousIndex.ToString());
+
+            return View("ImageDisplay");
+        }
+
+        //STOP marking boxes
+        public IActionResult StopImagePage([FromServices] IHttpContextAccessor httpContextAccessor)
+        {
+            // Get the current session
+            var session = httpContextAccessor.HttpContext.Session;
+            session.Clear();
+
+            return RedirectToAction("Index", "Home");
         }
     }
 }

@@ -7,7 +7,7 @@
     string images = Context.Session.GetString("ImageModels");
     List<ImageModel> imageModels = JsonConvert.DeserializeObject<List<ImageModel>>(images);
 
-    var imageIndex = 0;
+    int imageIndex = Int32.Parse(Context.Session.GetString("CurrentIndex"));
 
     var imageDataBase64 = imageModels[imageIndex].ImageDataBase64;
     var imageName = imageModels[imageIndex].ImageName;
@@ -46,6 +46,28 @@
     </div>
 </div>
 
+
+<div id="buttonContainer" class="d-flex justify-content-between">
+    @if (imageIndex > 0)
+    {
+        <form method="post" asp-action="PreviousImagePage">
+            <button type="submit" class="btn btn-primary">Previous Image</button>
+        </form>
+    }
+
+    @if(imageModels.Count() - 1 > imageIndex)
+    {
+        <form method="post" asp-action="NextImagePage">
+            <button type="submit" class="btn btn-primary">Next Image</button>
+        </form>
+    }
+</div>
+
+<div class="fixed-bottom fixed-right m-3">
+    <form method="post" asp-action="StopImagePage">
+        <button type="submit" class="btn btn-outline-danger">STOP</button>
+    </form>
+</div>
 
 
 
