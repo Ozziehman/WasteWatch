@@ -1,19 +1,26 @@
-﻿@model ImageModel
+﻿@using Newtonsoft.Json;
+@model ImageModel
 @{
     ViewData["Title"] = "ImageDisplay";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
-    var image = Model.ImageData;
-    var imageName = Model.ImageName;
+    string images = Context.Session.GetString("ImageModels");
+    List<ImageModel> imageModels = JsonConvert.DeserializeObject<List<ImageModel>>(images);
+
+    int imageIndex = Int32.Parse(Context.Session.GetString("CurrentIndex"));
+
+    var imageDataBase64 = imageModels[imageIndex].ImageDataBase64;
+    var imageName = imageModels[imageIndex].ImageName;
     List<string> dummyCatagories = new List<string>();
     dummyCatagories.Add("Toy");
     dummyCatagories.Add("Lid");
     dummyCatagories.Add("Container");
 }
 
-@if (Model != null && image != null)
-{
-    <img id="sourceImage" src="data:image/jpeg;base64,@Convert.ToBase64String(image)" alt="@imageName" style="display: none;" />
+<div id="imageModelsLength" value="@imageModels.Count()"></div>
+
+@if(imageDataBase64 != null){
+    <img id="sourceImage" src="data:image/jpeg;base64,@imageDataBase64" alt="@imageName" style="display: none;" />
     <div id="imageName" style="display:none;">@imageName</div>
 }
 
@@ -40,5 +47,29 @@
 </div>
 
 
+<div id="buttonContainer" class="d-flex justify-content-between">
+    @if (imageIndex > 0)
+    {
+        <form method="post" asp-action="PreviousImagePage">
+            <button type="submit" class="btn btn-primary">Previous Image</button>
+        </form>
+    }
+
+    @if(imageModels.Count() - 1 > imageIndex)
+    {
+        <form method="post" asp-action="NextImagePage">
+            <button type="submit" class="btn btn-primary">Next Image</button>
+        </form>
+    }
+</div>
+
+<div class="fixed-bottom fixed-right m-3">
+    <form method="post" asp-action="StopImagePage">
+        <button type="submit" class="btn btn-outline-danger">STOP</button>
+    </form>
+</div>
+
+
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
+
