@@ -20,6 +20,7 @@ builder.Services.AddSession(options =>
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
+ 
 
 var app = builder.Build();
 
