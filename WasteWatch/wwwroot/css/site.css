@@ -24,7 +24,7 @@ body {
 #OverviewContainer {
     position: absolute;
     overflow-y: scroll;
-    max-height: 80%;
+    max-height: 50%;
     top: 12%;
     width: 25%;
     right: 12%;

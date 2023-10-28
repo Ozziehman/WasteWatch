@@ -1,19 +1,17 @@
 ﻿// Get references to various HTML elements
-var canvas = document.getElementById('skiaCanvas');
-var image = document.getElementById('sourceImage');
-var imageName = document.getElementById('imageName');
-var ctx = canvas.getContext('2d');
-var isDragging = false;
-var startX, startY, endX, endY;
-var img = new Image();
-var boxNameInput = document.getElementById('boxName');
-var saveBoxButton = document.getElementById('button-addon2');
-var overview = document.getElementById('overview');
-var downloadButton = document.getElementById('downloadButton');
-var boxes = []; // array of boxes with the format {name, startX, startY, endX, endY}
-var dataToDownload = []; // array of boxes with the format {name, startX, startY, endX, endY}
-
-
+var canvas = document.getElementById('skiaCanvas'); // Get the canvas element
+var image = document.getElementById('sourceImage'); // Get the source image element
+var imageName = document.getElementById('imageName'); // Get an element for image name (not used in the provided code)
+var ctx = canvas.getContext('2d'); // Get the 2D rendering context for the canvas
+var isDragging = false; // Flag to indicate if the mouse is currently dragging
+var startX, startY, endX, endY; // Variables to store the starting and ending coordinates of the selection box
+var img = new Image(); // Create a new image object
+var boxNameInput = document.getElementById('boxName'); // Get the input element for box name
+var saveBoxButton = document.getElementById('button-addon2'); // Get the "Save Box" button
+var overview = document.getElementById('overview'); // Get the overview element
+var downloadButton = document.getElementById('downloadButton'); // Get the "Download" button
+var boxes = []; // An array to store box data with the format {name, startX, startY, endX, endY}
+var dataToDownload = []; // An array to store box data for download with the format {name, startX, startY, endX, endY}
 
 // Check if the canvas and image elements exist
 if (canvas && image) {
@@ -46,9 +44,9 @@ canvas.addEventListener("mousemove", function (e) {
 // Event listener for when the mouse button is released on the canvas
 canvas.addEventListener("mouseup", function () {
     isDragging = false;
-    boxNameInput.style.display = 'block';
-    saveBoxButton.style.display = 'block';
-    boxNameInput.focus();
+    boxNameInput.style.display = 'block'; // Display the input for box name
+    saveBoxButton.style.display = 'block'; // Display the "Save Box" button
+    boxNameInput.focus(); // Set focus to the box name input
 });
 
 // Event listener for the "Save Box" button
@@ -73,8 +71,8 @@ saveBoxButton.addEventListener("click", function () {
         boxes.forEach(drawBox);
         updateOverview();
 
-        boxNameInput.style.display = 'none';
-        saveBoxButton.style.display = 'none';
+        boxNameInput.style.display = 'none'; // Hide the box name input
+        saveBoxButton.style.display = 'none'; // Hide the "Save Box" button
     }
 });
 
@@ -203,5 +201,6 @@ function deleteBox(index) {
     }
 }
 */
+
 // Initial update of the overview
 updateOverview();
