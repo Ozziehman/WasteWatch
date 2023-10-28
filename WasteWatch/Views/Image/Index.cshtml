@@ -4,12 +4,42 @@
 @{
 }
 
-@using (Html.BeginForm("UploadImage", "Image", FormMethod.Post, new { enctype = "multipart/form-data" }))
+@using (Html.BeginForm("UploadImages", "Image", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     <div class="form-group">
-        <label for="file">Choose an Image</label>
-        <input type="file" class="form-control-file" id="file" name="file">
+        <label for="files">Choose Image(s)</label>
+        <input type="file" class="form-control-file" id="files" name="files" multiple>
     </div>
     <hr />
-    <button type="submit" class="btn btn-primary">Upload Image</button>
+    <button type="submit" class="btn btn-primary">Upload Image(s)</button>
+}
+
+<div id="imagePreview"></div>
+
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const fileInput = document.querySelector("#files");
+            const imagePreview = document.querySelector("#imagePreview");
+
+            fileInput.addEventListener("change", function () {
+                imagePreview.innerHTML = ""; // Clear previous previews
+
+                for (const file of fileInput.files) {
+                    const image = document.createElement("img");
+                    image.className = "preview-image";
+
+                    const reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        image.src = e.target.result;
+                        imagePreview.appendChild(image);
+                    };
+
+                    reader.readAsDataURL(file);
+                }
+            });
+        });
+    </script>
 }
