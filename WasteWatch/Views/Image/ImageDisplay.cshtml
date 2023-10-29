@@ -1,16 +1,19 @@
 ﻿@using Newtonsoft.Json;
+@using System.Text;
 @model ImageModel
 @{
     ViewData["Title"] = "ImageDisplay";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
     string images = Context.Session.GetString("ImageModels");
+    Console.WriteLine(Encoding.UTF8.GetBytes(images).Length + " Byte stored in sessionstorage 'ImageModels' ");
     //Console.WriteLine(images);
     List<ImageModel> imageModels = JsonConvert.DeserializeObject<List<ImageModel>>(images);
 
     int imageIndex = Int32.Parse(Context.Session.GetString("CurrentIndex"));
 
-    var imageDataBase64 = imageModels[imageIndex].ImageDataBase64;
+    //Get the image data in bytes from the imageModel and convert it to base 64
+    var imageDataBase64 = Convert.ToBase64String(imageModels[imageIndex].ImageData);
     var imageName = imageModels[imageIndex].ImageName;
     List<string> dummyCatagories = new List<string>();
 
