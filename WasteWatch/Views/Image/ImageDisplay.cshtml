@@ -5,6 +5,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 
     string images = Context.Session.GetString("ImageModels");
+    //Console.WriteLine(images);
     List<ImageModel> imageModels = JsonConvert.DeserializeObject<List<ImageModel>>(images);
 
     int imageIndex = Int32.Parse(Context.Session.GetString("CurrentIndex"));
@@ -12,6 +13,8 @@
     var imageDataBase64 = imageModels[imageIndex].ImageDataBase64;
     var imageName = imageModels[imageIndex].ImageName;
     List<string> dummyCatagories = new List<string>();
+
+    //These dummycatagories are just for testing purposes
     dummyCatagories.Add("Toy");
     dummyCatagories.Add("Lid");
     dummyCatagories.Add("Container");
@@ -48,13 +51,6 @@
 
 
 <div id="buttonContainer" class="d-flex justify-content-between">
-    @if (imageIndex > 0)
-    {
-        <form method="post" asp-action="PreviousImagePage">
-            <button type="submit" class="btn btn-primary">Previous Image</button>
-        </form>
-    }
-
     @if(imageModels.Count() - 1 > imageIndex)
     {
         <form method="post" asp-action="NextImagePage">

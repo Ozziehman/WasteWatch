@@ -66,18 +66,6 @@ namespace WasteWatch.Controllers
             return View("ImageDisplay");
         }
 
-        public IActionResult PreviousImagePage([FromServices] IHttpContextAccessor httpContextAccessor)
-        {
-
-            // Get the current session
-            var session = httpContextAccessor.HttpContext.Session;
-
-            int currentIndex = Int32.Parse(session.GetString("CurrentIndex"));
-            int previousIndex = currentIndex - 1;
-            session.SetString("CurrentIndex", previousIndex.ToString());
-
-            return View("ImageDisplay");
-        }
 
         //STOP marking boxes
         public IActionResult StopImagePage([FromServices] IHttpContextAccessor httpContextAccessor)
@@ -87,6 +75,15 @@ namespace WasteWatch.Controllers
             session.Clear();
 
             return RedirectToAction("Index", "Home");
+        }
+
+        public IActionResult UploadDataToDb(string boxes)
+        {
+            //TODO: Upload data to database with right formatting!!!!
+            //_______________________________________________________
+            Console.WriteLine("Boxes to be sent to database: ");
+            Console.WriteLine(boxes);
+            return Json(new { success = true, responseText = "Your message successfuly sent!" });
         }
     }
 }

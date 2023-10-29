@@ -10,8 +10,7 @@ var boxNameInput = document.getElementById('boxName'); // Get the input element 
 var saveBoxButton = document.getElementById('button-addon2'); // Get the "Save Box" button
 var overview = document.getElementById('overview'); // Get the overview element
 var downloadButton = document.getElementById('downloadButton'); // Get the "Download" button
-var boxes = []; // An array to store box data with the format {name, startX, startY, endX, endY}
-var dataToDownload = []; // An array to store box data for download with the format {name, startX, startY, endX, endY}
+var boxes = []; // An array to store box data with the format {name, startX, startY, endX, endY
 
 // Check if the canvas and image elements exist
 if (canvas && image) {
@@ -61,7 +60,6 @@ saveBoxButton.addEventListener("click", function () {
             endY: endY
         };
         boxes.push(box);
-        dataToDownload.push(box);
         // Log the coordinates
         console.log("Box Coordinates: startX=" + startX + ", startY=" + startY + ", endX=" + endX + ", endY=" + endY);
         console.log("Box Name: " + boxName);
@@ -78,10 +76,16 @@ saveBoxButton.addEventListener("click", function () {
 
 // Event listener for the "Download" button
 downloadButton.addEventListener("click", function () {
+
+    //THIS IS JUST AN EXAMPLE OF AN AJAX
+    uploadDataToDb(boxes);
+    //
+
+
     const jsZip = new JSZip();
 
     // Create text files with box data inside a zip file
-    dataToDownload.forEach((item, index) => {
+    boxes.forEach((item, index) => {
         const textContent = `name: ${item.name}, startX: ${item.startX}, startY: ${item.startY}, endX: ${item.endX}, endY: ${item.endY}`;
         jsZip.file(`data_${index}.txt`, textContent);
     });
@@ -183,7 +187,6 @@ function updateOverview() {
 function deleteBox(index) {
     // Remove the box from the 'boxes' array
     boxes.splice(index, 1);
-    dataToDownload.splice(index, 1);
     // Redraw the canvas and update the overview
     clearCanvas();
     updateOverview();
@@ -204,3 +207,20 @@ function deleteBox(index) {
 
 // Initial update of the overview
 updateOverview();
+
+
+//ajax function to upload data to db
+function uploadDataToDb(boxes) {
+    var boxesJson = JSON.stringify(boxes);
+    $.ajax({
+        type: "POST",
+        url: "/Image/UploadDataToDb",
+        data: { boxes: boxesJson },
+        success: function (response) {
+            console.log(response);
+        },
+        error: function (response) {
+            console.log(response);
+        }
+    });
+}
