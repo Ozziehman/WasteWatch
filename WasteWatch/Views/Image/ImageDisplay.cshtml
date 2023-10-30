@@ -15,12 +15,7 @@
     //Get the image data in bytes from the imageModel and convert it to base 64
     var imageDataBase64 = Convert.ToBase64String(imageModels[imageIndex].ImageData);
     var imageName = imageModels[imageIndex].ImageName;
-    List<string> dummyCatagories = new List<string>();
-
-    //These dummycatagories are just for testing purposes
-    dummyCatagories.Add("Toy");
-    dummyCatagories.Add("Lid");
-    dummyCatagories.Add("Container");
+    var Categories = ViewData["Categories"] as List<Category>;
 }
 
 <input id="rawImageData" value="@imageDataBase64" style="display:none"/>
@@ -35,9 +30,9 @@
 
 <div class= "input-group mb-3">
     <select class="form-control" id="boxName" style="display: none;" aria-label="Select Box" aria-describedby="button-addon2">
-        @foreach (string catagory in dummyCatagories)
+        @foreach (Category catagory in Categories)
         {
-            <option value="@catagory">@catagory</option>
+            <option value="@catagory.CategoryName">@catagory.CategoryName</option>
         })
     </select>
     <button class="btn btn-primary" type="button" id="button-addon2" style="display: none;">Save Box</button>
