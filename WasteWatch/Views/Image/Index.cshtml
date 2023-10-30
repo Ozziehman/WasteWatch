@@ -13,18 +13,16 @@
         <input type="file" class="form-control-file" id="files" name="files" multiple>
     </div>
     <hr />
-    <button type="submit" class="btn btn-primary">Upload Image(s)</button>
+    <button type="submit" class="btn btn-primary" id="uploadButton" disabled>Upload Image(s)</button>
 }
 
 <div id="imagePreview"></div>
 
-
-
 @section Scripts {
     <style>
         .preview-image {
-            max-width: 300px; 
-            margin: 5px; 
+            max-width: 300px;
+            margin: 5px;
         }
     </style>
 
@@ -32,6 +30,7 @@
         document.addEventListener("DOMContentLoaded", function () {
             const fileInput = document.querySelector("#files");
             const imagePreview = document.querySelector("#imagePreview");
+            const uploadButton = document.querySelector("#uploadButton");
 
             fileInput.addEventListener("change", function () {
                 imagePreview.innerHTML = ""; // Clear previous previews
@@ -48,6 +47,12 @@
                     };
 
                     reader.readAsDataURL(file);
+                }
+
+                if (fileInput.files.length > 0) {
+                    uploadButton.removeAttribute("disabled");
+                } else {
+                    uploadButton.setAttribute("disabled", "disabled");
                 }
             });
         });
