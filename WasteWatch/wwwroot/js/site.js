@@ -1,7 +1,8 @@
 ﻿// Get references to various HTML elements
 var canvas = document.getElementById('skiaCanvas'); // Get the canvas element
 var image = document.getElementById('sourceImage'); // Get the source image element
-var imageName = document.getElementById('imageName'); // Get an element for image name (not used in the provided code)
+var rawImageData = document.getElementById('rawImageData').value; // Get an element for raw image data 
+var imageName = document.getElementById('imageName'); // Get an element for image name 
 var ctx = canvas.getContext('2d'); // Get the 2D rendering context for the canvas
 var isDragging = false; // Flag to indicate if the mouse is currently dragging
 var startX, startY, endX, endY; // Variables to store the starting and ending coordinates of the selection box
@@ -77,7 +78,7 @@ saveBoxButton.addEventListener("click", function () {
 // Event listener for the "Download" button
 downloadButton.addEventListener("click", function () {
 
-    //THIS IS JUST AN EXAMPLE OF AN AJAX
+    //Store in db
     uploadDataToDb(boxes);
     //
 
@@ -215,7 +216,9 @@ function uploadDataToDb(boxes) {
     $.ajax({
         type: "POST",
         url: "/Image/UploadDataToDb",
-        data: { boxes: boxesJson },
+        data: {
+            boxes: boxesJson
+        },
         success: function (response) {
             console.log(response);
         },
