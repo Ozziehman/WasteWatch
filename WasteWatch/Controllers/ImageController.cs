@@ -58,6 +58,8 @@ namespace WasteWatch.Controllers
             session.SetString("ImageModels", jsonImageModels);
             session.SetString("CurrentIndex", "0");
 
+            ViewData["Categories"] = _context.Categories.ToList();
+
             return View("ImageDisplay");
         }
 
@@ -106,8 +108,8 @@ namespace WasteWatch.Controllers
             int result = _context.SaveChanges();
 
 
-            var testimage = _context.Images.Find(3);
-            var testbase64 = Convert.ToBase64String(testimage.ImageData);
+            //var testimage = _context.Images.Find(3);
+            //var testbase64 = Convert.ToBase64String(testimage.ImageData);
 
             if (result > 0)
             {
