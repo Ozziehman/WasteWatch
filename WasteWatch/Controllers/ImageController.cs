@@ -74,6 +74,8 @@ namespace WasteWatch.Controllers
             int nextIndex = currentIndex + 1;
             session.SetString("CurrentIndex", nextIndex.ToString());
 
+            ViewData["Categories"] = _context.Categories.ToList();
+
             return View("ImageDisplay");
         }
 
