@@ -49,6 +49,7 @@
                     reader.readAsDataURL(file);
                 }
 
+                // Disable button if there are no files uploaded
                 if (fileInput.files.length > 0) {
                     uploadButton.removeAttribute("disabled");
                 } else {
