@@ -27,15 +27,17 @@ if (canvas && image) {
 canvas.addEventListener("mousedown", function (e) {
     isDragging = true;
     // Start drawing the selection box
-    startX = e.clientX - canvas.getBoundingClientRect().left;
-    startY = e.clientY - canvas.getBoundingClientRect().top;
+    startX = Math.round(e.clientX - canvas.getBoundingClientRect().left);
+    startY = Math.round(e.clientY - canvas.getBoundingClientRect().top);
+
 });
 
 // Event listener for when the mouse is moved over the canvas
 canvas.addEventListener("mousemove", function (e) {
     if (isDragging) {
-        endX = e.clientX - canvas.getBoundingClientRect().left;
-        endY = e.clientY - canvas.getBoundingClientRect().top;
+        endX = Math.round(e.clientX - canvas.getBoundingClientRect().left);
+        endY = Math.round(e.clientY - canvas.getBoundingClientRect().top);
+
         clearCanvas();
         boxes.forEach(drawBox);
         drawSelectionBox();
