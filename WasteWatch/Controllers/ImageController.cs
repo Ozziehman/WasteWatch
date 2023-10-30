@@ -6,6 +6,9 @@ using Newtonsoft.Json;
 using WasteWatch.Data;
 using System;
 using Microsoft.Extensions.Logging;
+using System.IO;
+using System.IO.Compression;
+
 
 namespace WasteWatch.Controllers
 {
@@ -157,6 +160,75 @@ namespace WasteWatch.Controllers
             return Json(new { success = false, responseText = "Failed to upload to db" });
 
 
+        }
+
+        public IActionResult GetImagesFromDb()
+        {
+            var images = _context.Images.ToList();
+            if (images.Count == 0)
+            {
+                // Handle the case where there are no images to download.
+                return NotFound();
+            }
+
+            // Create a memory stream to store the zip file
+            using (var zipStream = new MemoryStream())
+            {
+                using (var archive = new ZipArchive(zipStream, ZipArchiveMode.Create, true))
+                {
+                    foreach (var image in images)
+                    {
+                        // Create a memory stream for each image
+                        using (var imageStream = new MemoryStream(image.ImageData))
+                        {
+                            // Create an entry in the zip archive for each image
+                            var entry = archive.CreateEntry($"{image.Id}.jpg"); // Use the appropriate file extension
+                            using (var entryStream = entry.Open())
+                            {
+                                imageStream.CopyTo(entryStream);
+                            }
+                        }
+                    }
+                }
+
+                // Set the content type and headers for the response
+                Response.Headers.Add("Content-Disposition", "attachment; filename=images.zip");
+                Response.ContentType = "application/zip";
+
+                // Write the zip data to the response
+                return File(zipStream.ToArray(), "application/zip");
+            }
+        }
+
+        public IActionResult GetBoxesYOLOFromDb()
+        {
+            var images = _context.Images
+                .Select(image => new { Id = image.Id, BoxesYOLO = image.BoxesYOLO })
+                .ToList();
+
+            // Create a memory stream to store the zip file
+            using (var zipStream = new MemoryStream())
+            {
+                using (var archive = new ZipArchive(zipStream, ZipArchiveMode.Create, true))
+                {
+                    foreach (var image in images)
+                    {
+                        // Create an entry for the text data
+                        using (var textEntryStream = archive.CreateEntry($"{image.Id}_BoxesYOLO.txt").Open())
+                        using (var writer = new StreamWriter(textEntryStream))
+                        {
+                            writer.Write(image.BoxesYOLO);
+                        }
+                    }
+                }
+
+                // Set the content type and headers for the response
+                Response.Headers.Add("Content-Disposition", "attachment; filename=boxes_yolo_data.zip");
+                Response.ContentType = "application/zip";
+
+                // Write the zip data to the response
+                return File(zipStream.ToArray(), "application/zip");
+            }
         }
     }
 }
