@@ -17,15 +17,13 @@
                 <input asp-for="CategoryName" class="form-control" />
                 <span asp-validation-for="CategoryName" class="text-danger"></span>
             </div>
+            <hr />
             <div class="form-group" style="margin:10px">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Create" class="btn btn-primary"/> |
+                <a asp-action="Index">Back to List</a>
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {
