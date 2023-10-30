@@ -23,7 +23,8 @@
     dummyCatagories.Add("Container");
 }
 
-<div id="imageModelsLength" value="@imageModels.Count()"></div>
+<input id="rawImageData" value="@imageDataBase64" style="display:none"/>
+
 
 @if(imageDataBase64 != null){
     <img id="sourceImage" src="data:image/jpeg;base64,@imageDataBase64" alt="@imageName" style="display: none;" />

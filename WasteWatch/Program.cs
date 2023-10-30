@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using WasteWatch.Data;
+using WasteWatch.Models;
 
 namespace WasteWatch
 {

@@ -3,12 +3,21 @@ using WasteWatch.Models;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
+using WasteWatch.Data;
 
 namespace WasteWatch.Controllers
 {
 	public class ImageController : Controller
 	{
-		public IActionResult Index()
+        private readonly ApplicationDbContext _context;
+        private readonly ILogger<ImageController> _logger;
+
+        public ImageController(ApplicationDbContext context, ILogger<ImageController> logger)
+        {
+            _context = context;
+            _logger = logger;
+        }
+        public IActionResult Index()
 		{
 			return View();
 		}
@@ -79,11 +88,34 @@ namespace WasteWatch.Controllers
 
         public IActionResult UploadDataToDb(string boxes)
         {
-            //TODO: Upload data to database with right formatting!!!!
-            //_______________________________________________________
-            Console.WriteLine("Boxes to be sent to database: ");
-            Console.WriteLine(boxes);
-            return Json(new { success = true, responseText = "Your message successfuly sent!" });
+            //Get correct picture with the Imagemodels forms essionstorage and the current index of the list of images that is stored there
+            //Raw Data of image could not be passed through AJAX because of size limitations so it gets it straight through the server side sessionstorage
+            int currentIndex = Int32.Parse(HttpContext.Session.GetString("CurrentIndex"));
+            string jsonImageModels = HttpContext.Session.GetString("ImageModels");
+            List<ImageModel> imageModels = JsonConvert.DeserializeObject<List<ImageModel>>(jsonImageModels);
+           
+            byte[] rawImageDataByte = imageModels[currentIndex].ImageData;
+
+            Image image = new Image
+            {
+                ImageData = rawImageDataByte,
+                Boxes = boxes
+            };
+
+            _context.Images.Add(image);
+            int result = _context.SaveChanges();
+
+
+            /*var testimage = _context.Images.FirstOrDefault();
+            var testbase64 = Convert.ToBase64String(testimage.ImageData);*/
+
+            if (result > 0)
+            {
+                return Json(new { success = true, responseText = "Succesfully uploaded to db" });   
+            }
+            return Json(new { success = false, responseText = "Failed to upload to db" });
+
+
         }
     }
 }
