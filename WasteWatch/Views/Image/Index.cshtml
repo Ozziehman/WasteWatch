@@ -2,10 +2,54 @@
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
+    Context.Session.Clear();
+    Console.WriteLine(Context.Session.GetString("ImageModels"));
 }
 
-@using (Html.BeginForm("UploadImage", "Image", FormMethod.Post, new { enctype = "multipart/form-data" }))
+@using (Html.BeginForm("UploadImages", "Image", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
-    <input type="file" name="file" />
-    <input type="submit" value="Upload Image" />
+    <div class="form-group">
+        <label for="files">Choose Image(s)</label>
+        <input type="file" class="form-control-file" id="files" name="files" multiple>
+    </div>
+    <hr />
+    <button type="submit" class="btn btn-primary">Upload Image(s)</button>
+}
+
+<div id="imagePreview"></div>
+
+
+
+@section Scripts {
+    <style>
+        .preview-image {
+            max-width: 300px; 
+            margin: 5px; 
+        }
+    </style>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const fileInput = document.querySelector("#files");
+            const imagePreview = document.querySelector("#imagePreview");
+
+            fileInput.addEventListener("change", function () {
+                imagePreview.innerHTML = ""; // Clear previous previews
+
+                for (const file of fileInput.files) {
+                    const image = document.createElement("img");
+                    image.className = "preview-image";
+
+                    const reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        image.src = e.target.result;
+                        imagePreview.appendChild(image);
+                    };
+
+                    reader.readAsDataURL(file);
+                }
+            });
+        });
+    </script>
 }

@@ -1,7 +1,75 @@
-﻿@model ImageModel
+﻿@using Newtonsoft.Json;
+@using System.Text;
+@model ImageModel
+@{
+    ViewData["Title"] = "ImageDisplay";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 
-@if (Model != null && Model.ImageData != null)
-{
-    <h2>Uploaded Image:</h2>
-    <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model.ImageData)" alt="@Model.ImageName" />
+    string images = Context.Session.GetString("ImageModels");
+    Console.WriteLine(Encoding.UTF8.GetBytes(images).Length + " Byte stored in sessionstorage 'ImageModels' ");
+    //Console.WriteLine(images);
+    List<ImageModel> imageModels = JsonConvert.DeserializeObject<List<ImageModel>>(images);
+
+    int imageIndex = Int32.Parse(Context.Session.GetString("CurrentIndex"));
+
+    //Get the image data in bytes from the imageModel and convert it to base 64
+    var imageDataBase64 = Convert.ToBase64String(imageModels[imageIndex].ImageData);
+    var imageName = imageModels[imageIndex].ImageName;
+    List<string> dummyCatagories = new List<string>();
+
+    //These dummycatagories are just for testing purposes
+    dummyCatagories.Add("Toy");
+    dummyCatagories.Add("Lid");
+    dummyCatagories.Add("Container");
 }
+
+<input id="rawImageData" value="@imageDataBase64" style="display:none"/>
+
+
+@if(imageDataBase64 != null){
+    <img id="sourceImage" src="data:image/jpeg;base64,@imageDataBase64" alt="@imageName" style="display: none;" />
+    <div id="imageName" style="display:none;">@imageName</div>
+}
+
+<canvas id="skiaCanvas" width="800" height="600"></canvas>
+
+<div class= "input-group mb-3">
+    <select class="form-control" id="boxName" style="display: none;" aria-label="Select Box" aria-describedby="button-addon2">
+        @foreach (string catagory in dummyCatagories)
+        {
+            <option value="@catagory">@catagory</option>
+        })
+    </select>
+    <button class="btn btn-primary" type="button" id="button-addon2" style="display: none;">Save Box</button>
+</div>
+
+
+<div id="OverviewContainer">
+    <h1>Overview</h1>
+    <div id="overview"></div>
+
+    <div id="downloadDiv">
+        <div class="btn btn-primary" id="downloadButton">Download</div>
+    </div>
+</div>
+
+
+<div id="buttonContainer" class="d-flex justify-content-between">
+    @if(imageModels.Count() - 1 > imageIndex)
+    {
+        <form method="post" asp-action="NextImagePage">
+            <button type="submit" class="btn btn-primary">Next Image</button>
+        </form>
+    }
+</div>
+
+<div class="fixed-bottom fixed-right m-3">
+    <form method="post" asp-action="StopImagePage">
+        <button type="submit" class="btn btn-outline-danger">STOP</button>
+    </form>
+</div>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
+

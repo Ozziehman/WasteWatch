@@ -20,3 +20,66 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+#OverviewContainer {
+    position: absolute;
+    overflow-y: scroll;
+    max-height: 50%;
+    top: 12%;
+    width: 25%;
+    right: 12%;
+    text-align: center;
+    padding-bottom: 15px;
+    border: solid;
+    border-width: 1px;
+    border-radius: 5px;
+    scrollbar-width: thin;
+    scrollbar-color: #888 #ccc;
+}
+ #OverviewContainer::-webkit-scrollbar {
+        width: 7px;
+    }
+
+    #OverviewContainer::-webkit-scrollbar-thumb {
+        background-color: #888;
+    }
+
+    #OverviewContainer::-webkit-scrollbar-thumb:hover {
+        background-color: #555;
+    }
+
+    #OverviewContainer::-webkit-scrollbar-track {
+        background: #ccc;
+    }
+#overview {
+    padding: 10px;
+}
+
+.overview-box {
+    border: solid;
+    display: block;
+    border-color: black;
+    border-width: 1px;
+    color: black;
+    padding: 5px 10px;
+    border-radius: 5px;
+    text-align: center;
+    margin-bottom: 5px;
+    margin-right: 10px;
+    flex: 1;
+}
+
+.box-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+#downloadDiv {
+    text-align: center;
+}
+
+.btn-danger {
+    margin-left: 10px;
+}
+
