@@ -11,7 +11,8 @@ var boxNameInput = document.getElementById('boxName'); // Get the input element 
 var saveBoxButton = document.getElementById('button-addon2'); // Get the "Save Box" button
 var overview = document.getElementById('overview'); // Get the overview element
 var downloadButton = document.getElementById('downloadButton'); // Get the "Download" button
-var boxes = []; // An array to store box data with the format {name, startX, startY, endX, endY}
+var uploadButton = document.getElementById('uploadButton'); // Get the "Upload" button
+var boxes = []; // An array to store box data with the format {name, startX, startY, endX, endY
 
 // Check if the canvas and image elements exist
 if (canvas && image) {
@@ -78,10 +79,6 @@ saveBoxButton.addEventListener("click", function () {
 // Event listener for the "Download" button
 downloadButton.addEventListener("click", function () {
 
-    //Store in db
-    uploadDataToDb(boxes);
-    //
-
 
     const jsZip = new JSZip();
 
@@ -111,6 +108,14 @@ downloadButton.addEventListener("click", function () {
             URL.revokeObjectURL(blobURL);
         });
 });
+
+uploadButton.addEventListener("click", function () {
+    //Store in db
+    uploadDataToDb(boxes);
+    //
+    var messageBox = document.getElementById("messageBox")
+    messageBox.style.display = 'block';
+})
 
 // Function to clear the canvas
 function clearCanvas() {
