@@ -22,4 +22,8 @@
     <PackageReference Include="SkiaSharp" Version="2.88.6" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+  </ItemGroup>
+
 </Project>
