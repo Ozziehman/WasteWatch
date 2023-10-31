@@ -22,7 +22,10 @@
     <form method="post" asp-action="GetImagesAndBoxesYOLOFromDb">
         <button type="submit" class="btn btn-danger">download all image data</button>
     </form>
-    
+    <form method="post" asp-controller="Image" asp-action="LoadImage">
+        <input name="Id" type="text" />
+        <button type="submit" class="btn btn-primary">Load Image with ID</button>
+    </form>
 
 </div>
 

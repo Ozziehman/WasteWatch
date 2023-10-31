@@ -96,6 +96,32 @@ namespace WasteWatch.Controllers
             return View("ImageDisplay");
         }
 
+        public IActionResult LoadImage(string Id, [FromServices] IHttpContextAccessor httpContextAccessor)
+        {
+ 
+            int IdInt = Int32.Parse(Id);
+            var session = httpContextAccessor.HttpContext.Session;
+            var image = _context.Images.Find(IdInt);
+            if (image != null) 
+            {
+                var jsonImage = JsonConvert.SerializeObject(image);
+
+                session.SetString("Image", jsonImage);
+                session.SetString("CurrentIndex", "0");
+                ViewData["Categories"] = _context.Categories.ToList();
+                return View("LoadedImage");
+            }
+            else
+            {
+               Console.WriteLine("Image not found");
+                return View("Index");
+            }
+            
+
+           
+
+        }
+             
         //Next image
         public IActionResult NextImagePage([FromServices] IHttpContextAccessor httpContextAccessor)
         {

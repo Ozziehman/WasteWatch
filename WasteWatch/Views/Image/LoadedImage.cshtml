@@ -1,33 +1,30 @@
 ﻿@using Newtonsoft.Json;
 @using System.Text;
-@model ImageModel
+
+@model Image
+
 @{
-    ViewData["Title"] = "ImageDisplay";
+    ViewData["Title"] = "LoadedImage";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
-    string images = Context.Session.GetString("ImageModels");
-    Console.WriteLine(Encoding.UTF8.GetBytes(images).Length + " Byte stored in sessionstorage 'ImageModels' ");
+    string jsonImage = Context.Session.GetString("Image");
+    Console.WriteLine(Encoding.UTF8.GetBytes(jsonImage).Length + " Byte stored in sessionstorage 'Image' ");
     //Console.WriteLine(images);
-    List<ImageModel> imageModels = JsonConvert.DeserializeObject<List<ImageModel>>(images);
-
-    int imageIndex = Int32.Parse(Context.Session.GetString("CurrentIndex"));
+    Image image = JsonConvert.DeserializeObject<Image>(jsonImage);
 
     //Get the image data in bytes from the imageModel and convert it to base 64
-    var imageDataBase64 = Convert.ToBase64String(imageModels[imageIndex].ImageData);
-    var imageName = imageModels[imageIndex].ImageName;
+    var imageDataBase64 = Convert.ToBase64String(image.ImageData);
+    var boxes = image.Boxes;
     var Categories = ViewData["Categories"] as List<Category>;
 }
 
-<input id="boxesFromDb" value="" style="display:none" />
+<input id="boxesFromDb" value="@boxes" style="display:none" />
 
-@if(imageDataBase64 != null){
-    <img id="sourceImage" src="data:image/jpeg;base64,@imageDataBase64" alt="@imageName" style="display: none;" />
-    <div id="imageName" style="display:none;">@imageName</div>
-}
+<img id="sourceImage" src="data:image/jpeg;base64,@imageDataBase64" alt="picture" style="display: none;" />
 
 <canvas id="skiaCanvas" width="500" height="500"></canvas>
 
-<div class= "input-group mb-3">
+<div class="input-group mb-3">
     <select class="form-control" id="boxName" style="display: none;" aria-label="Select Box" aria-describedby="button-addon2">
         @foreach (Category catagory in Categories)
         {
@@ -51,15 +48,6 @@
 </div>
 
 
-<div id="buttonContainer" class="d-flex justify-content-between" style="height:200px">
-    @if(imageModels.Count() - 1 > imageIndex)
-    {
-        <form method="post" asp-action="NextImagePage">
-            <button type="submit" class="btn btn-primary">Next Image</button>
-        </form>
-    }
-</div>
-
 <div class="fixed-bottom fixed-right m-3">
     <form method="post" asp-action="StopImagePage">
         <button type="submit" class="btn btn-outline-danger">STOP</button>
@@ -69,4 +57,3 @@
 
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
-
