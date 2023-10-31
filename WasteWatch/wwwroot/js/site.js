@@ -1,7 +1,6 @@
 ﻿// Get references to various HTML elements
 var canvas = document.getElementById('skiaCanvas'); // Get the canvas element
 var image = document.getElementById('sourceImage'); // Get the source image element
-var rawImageData = document.getElementById('rawImageData').value; // Get an element for raw image data 
 var imageName = document.getElementById('imageName'); // Get an element for image name 
 var ctx = canvas.getContext('2d'); // Get the 2D rendering context for the canvas
 var isDragging = false; // Flag to indicate if the mouse is currently dragging
@@ -14,6 +13,9 @@ var downloadButton = document.getElementById('downloadButton'); // Get the "Down
 var uploadButton = document.getElementById('uploadButton'); // Get the "Upload" button
 var boxes = []; // An array to store box data with the format {name, startX, startY, endX, endY
 
+
+var boxesFromDb = document.getElementById('boxesFromDb').value; // Get an element for boxes from db
+
 // Check if the canvas and image elements exist
 if (canvas && image) {
     // Set the image source and draw it on the canvas when it loads
@@ -23,22 +25,33 @@ if (canvas && image) {
     };
 }
 
+if (boxesFromDb != "") {
+    boxes = JSON.parse(boxesFromDb);
+    clearCanvas();
+    boxes.forEach(drawBox);
+    drawSelectionBox();
+}
+
+
 // Event listener for when the mouse button is pressed on the canvas
 canvas.addEventListener("mousedown", function (e) {
     isDragging = true;
     // Start drawing the selection box
-    startX = e.clientX - canvas.getBoundingClientRect().left;
-    startY = e.clientY - canvas.getBoundingClientRect().top;
+    startX = Math.round(e.clientX - canvas.getBoundingClientRect().left);
+    startY = Math.round(e.clientY - canvas.getBoundingClientRect().top);
+
 });
 
 // Event listener for when the mouse is moved over the canvas
 canvas.addEventListener("mousemove", function (e) {
     if (isDragging) {
-        endX = e.clientX - canvas.getBoundingClientRect().left;
-        endY = e.clientY - canvas.getBoundingClientRect().top;
+        endX = Math.round(e.clientX - canvas.getBoundingClientRect().left);
+        endY = Math.round(e.clientY - canvas.getBoundingClientRect().top);
+
         clearCanvas();
-        boxes.forEach(drawBox);
         drawSelectionBox();
+        boxes.forEach(drawBox);
+   
     }
 });
 
@@ -119,6 +132,7 @@ uploadButton.addEventListener("click", function () {
 
 // Function to clear the canvas
 function clearCanvas() {
+    
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
     boxes.forEach(drawBox);

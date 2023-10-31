@@ -6,6 +6,9 @@ using Newtonsoft.Json;
 using WasteWatch.Data;
 using System;
 using Microsoft.Extensions.Logging;
+using System.IO;
+using System.IO.Compression;
+
 
 namespace WasteWatch.Controllers
 {
@@ -93,6 +96,28 @@ namespace WasteWatch.Controllers
             return View("ImageDisplay");
         }
 
+        public IActionResult LoadImage(string Id, [FromServices] IHttpContextAccessor httpContextAccessor)
+        {
+ 
+            int IdInt = Int32.Parse(Id);
+            var session = httpContextAccessor.HttpContext.Session;
+            var image = _context.Images.Find(IdInt);
+            if (image != null) 
+            {
+                var jsonImage = JsonConvert.SerializeObject(image);
+
+                session.SetString("Image", jsonImage);
+                session.SetString("CurrentIndex", "0");
+                ViewData["Categories"] = _context.Categories.ToList();
+                return View("LoadedImage");
+            }
+            else
+            {
+               Console.WriteLine("Image not found");
+                return View("Index");
+            }
+        }
+             
         //Next image
         public IActionResult NextImagePage([FromServices] IHttpContextAccessor httpContextAccessor)
         {
@@ -122,26 +147,48 @@ namespace WasteWatch.Controllers
 
         public IActionResult UploadDataToDb(string boxes)
         {
+            byte[] rawImageDataByte;
+            List<ImageModel> imageModels = new List<ImageModel>();
             //Get correct picture with the Imagemodels forms essionstorage and the current index of the list of images that is stored there
             //Raw Data of image could not be passed through AJAX because of size limitations so it gets it straight through the server side sessionstorage
+
             int currentIndex = Int32.Parse(HttpContext.Session.GetString("CurrentIndex"));
+
             string jsonImageModels = HttpContext.Session.GetString("ImageModels");
-            List<ImageModel> imageModels = JsonConvert.DeserializeObject<List<ImageModel>>(jsonImageModels);
+            string imageJson = HttpContext.Session.GetString("Image");
+
+            if (jsonImageModels != null) 
+            {
+                imageModels = JsonConvert.DeserializeObject<List<ImageModel>>(jsonImageModels);
+                rawImageDataByte = imageModels[currentIndex].ImageData;
+            }
+            else if (imageJson != null)
+            {
+                imageModels.Add(JsonConvert.DeserializeObject<ImageModel>(imageJson));
+                rawImageDataByte = imageModels[currentIndex].ImageData;
+            }
+            else
+            {
+                Console.WriteLine("No image found");
+                return View("Index");
+            }
+           //___________________________________________ Data is now stored in rawImageDataByte now to add the rest...
             List<BoxModel> boxModels = JsonConvert.DeserializeObject<List<BoxModel>>(boxes);
 
             string yoloFormat = ConvertToYoloFormat(boxModels, 500, 500);
             Console.WriteLine(yoloFormat);
 
-            byte[] rawImageDataByte = imageModels[currentIndex].ImageData;
+            
 
             _logger.LogInformation(boxes);
 
+            // Create a new Image object
             Image image = new Image
             {
                 ImageData = rawImageDataByte,
                 Boxes = boxes,
                 BoxesYOLO = yoloFormat
-    };
+            };
 
             _context.Images.Add(image);
             int result = _context.SaveChanges();
@@ -158,5 +205,51 @@ namespace WasteWatch.Controllers
 
 
         }
+
+        public IActionResult GetImagesAndBoxesYOLOFromDb()
+        {
+            var images = _context.Images.ToList();
+            var yoloData = _context.Images
+                .Select(image => new { Id = image.Id, BoxesYOLO = image.BoxesYOLO })
+                .ToList();
+
+            // Create a memory stream to store the zip file
+            using (var zipStream = new MemoryStream())
+            {
+                using (var archive = new ZipArchive(zipStream, ZipArchiveMode.Create, true))
+                {
+                    foreach (var image in images)
+                    {
+                        // Create an entry in the "Images" folder for each image
+                        var entry = archive.CreateEntry($"Images/{image.Id}.jpg");
+                        using (var entryStream = entry.Open())
+                        using (var imageStream = new MemoryStream(image.ImageData))
+                        {
+                            imageStream.CopyTo(entryStream);
+                        }
+                    }
+
+                    foreach (var data in yoloData)
+                    {
+                        // Create an entry in the "YOLOData" folder for each YOLO data file
+                        var entry = archive.CreateEntry($"YOLOData/{data.Id}_BoxesYOLO.txt");
+                        using (var entryStream = entry.Open())
+                        using (var writer = new StreamWriter(entryStream))
+                        {
+                            writer.Write(data.BoxesYOLO);
+                        }
+                    }
+                }
+
+                // Set the content type and headers for the response
+                Response.Headers.Add("Content-Disposition", "attachment; filename=images_and_yolo_data.zip");
+                Response.ContentType = "application/zip";
+
+                // Write the zip data to the response
+                return File(zipStream.ToArray(), "application/zip");
+            }
+        }
+
+
     }
 }
