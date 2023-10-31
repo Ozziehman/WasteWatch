@@ -98,22 +98,36 @@ namespace WasteWatch.Controllers
 
         public IActionResult LoadImage(string Id, [FromServices] IHttpContextAccessor httpContextAccessor)
         {
- 
-            int IdInt = Int32.Parse(Id);
-            var session = httpContextAccessor.HttpContext.Session;
-            var image = _context.Images.Find(IdInt);
-            if (image != null) 
+            if (Id != null)
             {
-                var jsonImage = JsonConvert.SerializeObject(image);
+                if (int.TryParse(Id, out int IdInt))
+                {
+                    var session = httpContextAccessor.HttpContext.Session;
+                    var image = _context.Images.Find(IdInt);
+                    if (image != null)
+                    {
+                        var jsonImage = JsonConvert.SerializeObject(image);
 
-                session.SetString("Image", jsonImage);
-                session.SetString("CurrentIndex", "0");
-                ViewData["Categories"] = _context.Categories.ToList();
-                return View("LoadedImage");
+                        session.SetString("Image", jsonImage);
+                        session.SetString("CurrentIndex", "0");
+                        ViewData["Categories"] = _context.Categories.ToList();
+                        return View("LoadedImage");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Image not found");
+                        return View("Index");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Id is not a valid integer");
+                    return View("Index");
+                }
             }
             else
             {
-               Console.WriteLine("Image not found");
+                Console.WriteLine("Id is null");
                 return View("Index");
             }
         }
