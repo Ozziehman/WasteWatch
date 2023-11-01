@@ -17,7 +17,7 @@
     var imageName = imageModels[imageIndex].ImageName;
     var Categories = ViewData["Categories"] as List<Category>;
 }
-
+<body id="pagebody">
 <input id="boxesFromDb" value="" style="display:none" />
 
 @if(imageDataBase64 != null){
@@ -93,7 +93,7 @@
         <button type="submit" class="btn btn-outline-danger">STOP</button>
     </form>
 </div>
-
+</body>
 
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
