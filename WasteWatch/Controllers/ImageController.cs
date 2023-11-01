@@ -105,7 +105,7 @@ namespace WasteWatch.Controllers
                 {
                     var session = httpContextAccessor.HttpContext.Session;
                     session.SetString("CurrentLoadedImage", Id);
-                    var image = _context.Images.Find(IdInt);
+                    var image = _context.ImagesProcessed.Find(IdInt);
                     if (image != null)
                     {
                         var jsonImage = JsonConvert.SerializeObject(image);
@@ -168,7 +168,7 @@ namespace WasteWatch.Controllers
             //Get correct picture with the Imagemodels forms essionstorage and the current index of the list of images that is stored there
             //Raw Data of image could not be passed through AJAX because of size limitations so it gets it straight through the server side sessionstorage
 
-            Image currentImage = null;
+            ImageProcessed currentImage = null;
             var session = httpContextAccessor.HttpContext.Session;
 
             
@@ -195,14 +195,14 @@ namespace WasteWatch.Controllers
                 _logger.LogInformation(boxes);
 
                 //make new image object and put the data from imageModel into image
-                Image image = new Image()
+                ImageProcessed imageProcessed = new ImageProcessed()
                 {
                     ImageData = rawImageDataByte,
                     Boxes = boxes,
                     BoxesYOLO = yoloFormat
                 };
 
-                _context.Images.Add(image);
+                _context.ImagesProcessed.Add(imageProcessed);
                 int result = _context.SaveChanges();
 
 
@@ -224,7 +224,7 @@ namespace WasteWatch.Controllers
                 if (session.GetString("CurrentLoadedImage") != null)
                 {
                     //get currentImage 'from database with proper Id
-                    currentImage = _context.Images.Find(Int32.Parse(session.GetString("CurrentLoadedImage")));
+                    currentImage = _context.ImagesProcessed.Find(Int32.Parse(session.GetString("CurrentLoadedImage")));
                 }
 
                 //add the image Model to the list
@@ -245,7 +245,7 @@ namespace WasteWatch.Controllers
 
                 currentImage.Boxes = boxes;
                 currentImage.BoxesYOLO = yoloFormat;
-                _context.Images.Update(currentImage);
+                _context.ImagesProcessed.Update(currentImage);
 
                 int result = _context.SaveChanges();
 
