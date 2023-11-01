@@ -34,6 +34,31 @@
     <button class="btn btn-primary" type="button" id="button-addon2" style="display: none;">Save Box</button>
 </div>
 
+    <style>
+        #OverviewContainer {
+            border: 1px solid #ffffff;
+            border-radius: 5px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            overflow: auto;
+        }
+
+        .overview-box {
+            border: 1px #9FA6B2;
+            border-radius: 3px;
+            padding: 3px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        #skiaCanvas {
+            border: 2px solid #ffffff;
+            border-radius: 5px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+    </style>
 
 <div id="OverviewContainer">
         <h1>Overview Id: @Context.Session.GetString("CurrentLoadedImage")</h1>
