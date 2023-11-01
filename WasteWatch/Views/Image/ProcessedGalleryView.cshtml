@@ -10,15 +10,16 @@
     List<ImageProcessed> images = JsonConvert.DeserializeObject<List<ImageProcessed>>(jsonImages);
 }
 
-<body id="pagebody">
-
+<body id="PageBody">
     <div class="container">
         <div class="row">
             @foreach (ImageProcessed image in images)
             {
                 <div class="col-md-4">
+                    <input id="boxesFromDb" value="@image.Boxes" style="display:none">
                     <div class="card mb-4 shadow-sm">
-                        <img class="card-img-top" src="data:image/jpeg;base64,@Convert.ToBase64String(image.ImageData)" alt="Card image cap">
+                        <img id="Image" class="card-img-top" src="data:image/jpeg;base64,@Convert.ToBase64String(image.ImageData)" alt="Card image cap" style="display:none">
+                        <canvas id="Canvas" width="500" height="500"></canvas>
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-center">
                                 <div class="btn-group">
