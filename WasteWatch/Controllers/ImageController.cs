@@ -110,7 +110,8 @@ namespace WasteWatch.Controllers
                     {
                         var jsonImage = JsonConvert.SerializeObject(image);
                         //Clear the ProcessedGalleryView for less storage usage
-                        session.Remove("ProcessedGalleryView");                       
+                        session.Remove("ProcessedGalleryView");
+                        session.Remove("UnprocessedGalleryView");
                         //Store selected image into sessionstorage "Image"
                         session.SetString("Image", jsonImage);
                         session.SetString("CurrentIndex", "0");
@@ -152,7 +153,23 @@ namespace WasteWatch.Controllers
 
             return View("ProcessedGalleryView");
         }
-             
+
+        public IActionResult LoadUnprocessedGallery([FromServices] IHttpContextAccessor httpContextAccessor)
+        {
+            var images = _context.Images.ToList();
+
+            // Convert the list of ImageModel objects to JSON
+            var jsonImageModels = JsonConvert.SerializeObject(images);
+
+            // Get the current session
+            var session = httpContextAccessor.HttpContext.Session;
+
+            // Store all images from the database in sessionstorage "ProcessedGalleryView"
+            session.SetString("UnprocessedGalleryView", jsonImageModels);
+
+            return View("UnprocessedGalleryView");
+        }
+
         //Next image
         public IActionResult NextImagePage([FromServices] IHttpContextAccessor httpContextAccessor)
         {
@@ -177,7 +194,7 @@ namespace WasteWatch.Controllers
             var session = httpContextAccessor.HttpContext.Session;
             session.Clear();
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Image");
         }
 
         public IActionResult UploadDataToDb(string boxes, [FromServices] IHttpContextAccessor httpContextAccessor)

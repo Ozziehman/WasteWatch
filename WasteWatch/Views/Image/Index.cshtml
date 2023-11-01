@@ -26,16 +26,19 @@
         <button type="submit" class="btn btn-primary" id="downloadButton">Download Image Data</button>
     </form>
 
-    <form method="post" asp-controller="Image" asp-action="LoadImage" style="margin-top: 10px;">
+   @*  <form method="post" asp-controller="Image" asp-action="LoadImage" style="margin-top: 10px;">
         <div class="input-group">
             <input type="text" name="Id" class="form-control" placeholder="Enter Image ID" />
             <div class="input-group-append">
                 <button type="submit" class="btn btn-primary">Load Image</button>
             </div>
         </div>
-    </form>
+    </form> *@
     <form method="post" asp-controller="Image" asp-action="LoadProcessedGallery" style="margin-top: 10px;">
             <button type="submit" class="btn btn-primary">Processed Gallery View</button>
+    </form>
+    <form method="post" asp-controller="Image" asp-action="LoadUnprocessedGallery" style="margin-top: 10px;">
+        <button type="submit" class="btn btn-primary">Unprocessed Gallery View</button>
     </form>
 </div>
 

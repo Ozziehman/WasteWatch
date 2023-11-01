@@ -1,0 +1,35 @@
+﻿@using Newtonsoft.Json;
+@using System.Text;
+@model Image
+
+@{
+    string jsonImages = Context.Session.GetString("UnprocessedGalleryView");
+    List<Image> images = JsonConvert.DeserializeObject<List<Image>>(jsonImages);
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Your Page Title</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body id="PageBody">
+    <div class="container">
+        <div class="row">
+            @foreach (Image image in images)
+            {
+                <div class="col-md-4">
+                    <div class="card mb-4 shadow-sm">
+                        <img id="Image_@image.Id" class="card-img-top" src="data:image/jpeg;base64,@Convert.ToBase64String(image.BinaryData)" alt="Card image cap">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <label class="m-2">Id: @image.Id</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</body>
+</html>
