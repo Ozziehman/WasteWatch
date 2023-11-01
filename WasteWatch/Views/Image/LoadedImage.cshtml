@@ -17,7 +17,7 @@
     var boxes = image.Boxes;
     var Categories = ViewData["Categories"] as List<Category>;
 }
-
+<body id="pagebody">
 <input id="boxesFromDb" value="@boxes" style="display:none" />
 
 <img id="sourceImage" src="data:image/jpeg;base64,@imageDataBase64" alt="picture" style="display: none;" />
@@ -36,7 +36,7 @@
 
 
 <div id="OverviewContainer">
-    <h1>Overview</h1>
+        <h1>Overview Id: @Context.Session.GetString("CurrentLoadedImage")</h1>
     <div id="overview"></div>
 
     <div id="downloadDiv">
@@ -48,12 +48,12 @@
 </div>
 
 
-<div class="fixed-bottom fixed-right m-3">
+<div class="fixed-bottom fixed-right m-3" style="width:100px">
     <form method="post" asp-action="StopImagePage">
         <button type="submit" class="btn btn-outline-danger">STOP</button>
     </form>
 </div>
-
+</body>
 
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
