@@ -10,7 +10,8 @@ namespace WasteWatch.Data
 	public class ApplicationDbContext : IdentityDbContext
 	{
 
-		public DbSet<Image> Images { get; set; }
+        public DbSet<Image> Images { get; set; }
+        public DbSet<ImageProcessed> ImagesProcessed { get; set; }
 		public DbSet<Category> Categories { get; set; }
 		public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
 			: base(options)
