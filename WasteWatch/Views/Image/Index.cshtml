@@ -13,27 +13,33 @@
         <input type="file" class="form-control-file" id="files" name="files" multiple>
     </div>
     <hr />
-    <button type="submit" class="btn btn-primary">Upload Image(s)</button>
+    <button type="submit" class="btn btn-primary" id="uploadButton" disabled>Upload Image(s)</button>
+
 }
 
 <div id="imagePreview"></div>
 
-<div class="fixed-bottom fixed-right m-3" style="margin-bottom: 10%;">
+<div class="fixed-bottom fixed-right m-3">
     <form method="post" asp-action="GetImagesAndBoxesYOLOFromDb">
-        <button type="submit" class="btn btn-danger">download all image data</button>
-    </form>
-    <form method="post" asp-controller="Image" asp-action="LoadImage">
-        <input name="Id" type="text" />
-        <button type="submit" class="btn btn-primary">Load Image with ID</button>
+        <button type="submit" class="btn btn-primary" id="downloadButton">Download Image Data</button>
     </form>
 
+    <form method="post" asp-controller="Image" asp-action="LoadImage" style="margin-top: 10px;">
+        <div class="input-group">
+            <input type="text" name="Id" class="form-control" placeholder="Enter Image ID" />
+            <div class="input-group-append">
+                <button type="submit" class="btn btn-primary">Load Image</button>
+            </div>
+        </div>
+    </form>
 </div>
+
 
 @section Scripts {
     <style>
         .preview-image {
-            max-width: 300px; 
-            margin: 5px; 
+            max-width: 300px;
+            margin: 5px;
         }
     </style>
 
@@ -41,6 +47,7 @@
         document.addEventListener("DOMContentLoaded", function () {
             const fileInput = document.querySelector("#files");
             const imagePreview = document.querySelector("#imagePreview");
+            const uploadButton = document.querySelector("#uploadButton");
 
             fileInput.addEventListener("change", function () {
                 imagePreview.innerHTML = ""; // Clear previous previews
@@ -58,6 +65,14 @@
 
                     reader.readAsDataURL(file);
                 }
+
+                // Disable button if there are no files uploaded
+                if (fileInput.files.length > 0) {
+                    uploadButton.removeAttribute("disabled");
+                } else {
+                    uploadButton.setAttribute("disabled", "disabled");
+                }
+
             });
         });
     </script>

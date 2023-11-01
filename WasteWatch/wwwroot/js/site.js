@@ -12,9 +12,22 @@ var overview = document.getElementById('overview'); // Get the overview element
 var downloadButton = document.getElementById('downloadButton'); // Get the "Download" button
 var uploadButton = document.getElementById('uploadButton'); // Get the "Upload" button
 var boxes = []; // An array to store box data with the format {name, startX, startY, endX, endY
+var body = document.getElementById("pagebody");
 
-
+var boxFilled = false;
 var boxesFromDb = document.getElementById('boxesFromDb').value; // Get an element for boxes from db
+
+body.addEventListener("mousemove", function (e) {
+   if (boxesFromDb != "" && boxes.length == 0 && boxFilled == false) {
+        boxes = JSON.parse(boxesFromDb);
+
+       boxFilled = true;
+        updateOverview();
+        clearCanvas();
+        drawSelectionBox();
+        boxes.forEach(drawBox);
+    }
+});
 
 // Check if the canvas and image elements exist
 if (canvas && image) {
@@ -24,14 +37,6 @@ if (canvas && image) {
         ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
     };
 }
-
-if (boxesFromDb != "") {
-    boxes = JSON.parse(boxesFromDb);
-    clearCanvas();
-    boxes.forEach(drawBox);
-    drawSelectionBox();
-}
-
 
 // Event listener for when the mouse button is pressed on the canvas
 canvas.addEventListener("mousedown", function (e) {
@@ -51,7 +56,6 @@ canvas.addEventListener("mousemove", function (e) {
         clearCanvas();
         drawSelectionBox();
         boxes.forEach(drawBox);
-   
     }
 });
 

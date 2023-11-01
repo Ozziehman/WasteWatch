@@ -17,7 +17,7 @@
     var imageName = imageModels[imageIndex].ImageName;
     var Categories = ViewData["Categories"] as List<Category>;
 }
-
+<body id="pagebody">
 <input id="boxesFromDb" value="" style="display:none" />
 
 @if(imageDataBase64 != null){
@@ -38,14 +38,42 @@
 </div>
 
 
+<style>
+    #OverviewContainer {
+        border: 1px solid #ffffff;
+        border-radius: 5px;
+        padding: 20px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        text-align: center;
+        overflow:auto;
+    }
+
+    .overview-box {
+        border: 1px #9FA6B2;
+        border-radius: 3px;
+        padding: 3px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+
+    #skiaCanvas {
+        border: 2px solid #ffffff;
+        border-radius: 5px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+</style>
+
 <div id="OverviewContainer">
     <h1>Overview</h1>
     <div id="overview"></div>
 
     <div id="downloadDiv">
+        <br/>
         <div class="btn btn-primary" id="downloadButton">Download</div>
         <div class="btn btn-secondary" id="uploadButton">Upload To Db</div>
     </div>
+    <br/>
     <div id="messageBox" style="color: green; display:none">Uploaded to database</div>
 
 </div>
@@ -65,7 +93,7 @@
         <button type="submit" class="btn btn-outline-danger">STOP</button>
     </form>
 </div>
-
+</body>
 
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
