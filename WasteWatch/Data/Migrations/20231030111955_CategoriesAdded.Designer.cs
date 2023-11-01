@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WasteWatch.Data;
 
@@ -11,9 +12,11 @@ using WasteWatch.Data;
 namespace WasteWatch.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231030111955_CategoriesAdded")]
+    partial class CategoriesAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -166,21 +169,24 @@ namespace WasteWatch.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("LoginProvider")
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<string>("ProviderKey")
                         .HasMaxLength(128)
                         .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ProviderKey")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("UserId");
+                    b.HasKey("LoginProvider", "ProviderKey");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("AspNetUserLogins", (string)null);
                 });
@@ -236,78 +242,6 @@ namespace WasteWatch.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CategoryName = "Bak"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CategoryName = "Bloembak"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            CategoryName = "Buis"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            CategoryName = "CD-DVD hoes"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            CategoryName = "Emmer"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            CategoryName = "Gieter"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            CategoryName = "Jerrycan"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            CategoryName = "Kabel"
-                        },
-                        new
-                        {
-                            Id = 9,
-                            CategoryName = "Klerenhanger"
-                        },
-                        new
-                        {
-                            Id = 10,
-                            CategoryName = "Kozijn"
-                        },
-                        new
-                        {
-                            Id = 11,
-                            CategoryName = "Krat"
-                        },
-                        new
-                        {
-                            Id = 12,
-                            CategoryName = "Lp plaat"
-                        },
-                        new
-                        {
-                            Id = 13,
-                            CategoryName = "Tuinstoel"
-                        },
-                        new
-                        {
-                            Id = 14,
-                            CategoryName = "Vat"
-                        });
                 });
 
             modelBuilder.Entity("WasteWatch.Models.Image", b =>
@@ -319,10 +253,6 @@ namespace WasteWatch.Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Boxes")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("BoxesYOLO")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
