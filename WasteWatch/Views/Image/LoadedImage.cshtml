@@ -18,41 +18,41 @@
     var Categories = ViewData["Categories"] as List<Category>;
 }
 <body id="pagebody">
-<input id="boxesFromDb" value="@boxes" style="display:none" />
+    <input id="boxesFromDb" value="@boxes" style="display:none" />
 
-<img id="sourceImage" src="data:image/jpeg;base64,@imageDataBase64" alt="picture" style="display: none;" />
+    <img id="sourceImage" src="data:image/jpeg;base64,@imageDataBase64" alt="picture" style="display: none;" />
 
-<canvas id="skiaCanvas" width="500" height="500"></canvas>
+    <canvas id="skiaCanvas" width="500" height="500"></canvas>
 
-<div class="input-group mb-3">
-    <select class="form-control" id="boxName" style="display: none;" aria-label="Select Box" aria-describedby="button-addon2">
-        @foreach (Category catagory in Categories)
-        {
-            <option value="@catagory.CategoryName">@catagory.CategoryName</option>
-        })
-    </select>
-    <button class="btn btn-primary" type="button" id="button-addon2" style="display: none;">Save Box</button>
-</div>
-
-
-<div id="OverviewContainer">
-        <h1>Overview Id: @Context.Session.GetString("CurrentLoadedImage")</h1>
-    <div id="overview"></div>
-
-    <div id="downloadDiv">
-        <div class="btn btn-primary" id="downloadButton">Download</div>
-        <div class="btn btn-secondary" id="uploadButton">Upload To Db</div>
+    <div class="input-group mb-3">
+        <select class="form-control" id="boxName" style="display: none;" aria-label="Select Box" aria-describedby="button-addon2">
+            @foreach (Category catagory in Categories)
+            {
+                <option value="@catagory.CategoryName">@catagory.CategoryName</option>
+            })
+        </select>
+        <button class="btn btn-primary" type="button" id="button-addon2" style="display: none;">Save Box</button>
     </div>
-    <div id="messageBox" style="color: green; display:none">Uploaded to database</div>
-
-</div>
 
 
-<div class="fixed-bottom fixed-right m-3" style="width:100px">
-    <form method="post" asp-action="StopImagePage">
-        <button type="submit" class="btn btn-outline-danger">STOP</button>
-    </form>
-</div>
+    <div id="OverviewContainer">
+            <h1>Overview Id: @Context.Session.GetString("CurrentLoadedImage")</h1>
+        <div id="overview"></div>
+
+        <div id="downloadDiv">
+            <div class="btn btn-primary" id="downloadButton">Download</div>
+            <div class="btn btn-secondary" id="uploadButton">Upload To Db</div>
+        </div>
+        <div id="messageBox" style="color: green; display:none">Uploaded to database</div>
+
+    </div>
+
+
+    <div class="fixed-bottom fixed-right m-3" style="width:100px">
+        <form method="post" asp-action="StopImagePage">
+            <button type="submit" class="btn btn-outline-danger">STOP</button>
+        </form>
+    </div>
 </body>
 
 
