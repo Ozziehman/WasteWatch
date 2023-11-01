@@ -5,10 +5,10 @@
     ViewData["Title"] = "ImageDisplay";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
-    string images = Context.Session.GetString("ImageModels");
-    Console.WriteLine(Encoding.UTF8.GetBytes(images).Length + " Byte stored in sessionstorage 'ImageModels' ");
+    string jsonImages = Context.Session.GetString("ImageModels");
+    Console.WriteLine(Encoding.UTF8.GetBytes(jsonImages).Length + " Byte stored in sessionstorage 'ImageModels' ");
     //Console.WriteLine(images);
-    List<ImageModel> imageModels = JsonConvert.DeserializeObject<List<ImageModel>>(images);
+    List<ImageModel> imageModels = JsonConvert.DeserializeObject<List<ImageModel>>(jsonImages);
 
     int imageIndex = Int32.Parse(Context.Session.GetString("CurrentIndex"));
 
