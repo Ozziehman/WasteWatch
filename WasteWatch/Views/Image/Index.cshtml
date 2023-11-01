@@ -1,7 +1,4 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@{
     Context.Session.Clear();
     Console.WriteLine(Context.Session.GetString("ImageModels"));
 }
@@ -31,6 +28,9 @@
                 <button type="submit" class="btn btn-primary">Load Image</button>
             </div>
         </div>
+    </form>
+    <form method="post" asp-controller="Image" asp-action="LoadProcessedGallery" style="margin-top: 10px;">
+            <button type="submit" class="btn btn-primary">Processed Gallery View</button>
     </form>
 </div>
 

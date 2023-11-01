@@ -1,0 +1,37 @@
+﻿@using Newtonsoft.Json;
+@using System.Text;
+
+@model Image
+
+@{
+    string jsonImages = Context.Session.GetString("ProcessedGalleryView");
+    Console.WriteLine(Encoding.UTF8.GetBytes(jsonImages).Length + " Byte stored in sessionstorage 'ImageModels' ");
+    //Console.WriteLine(images);
+    List<ImageProcessed> images = JsonConvert.DeserializeObject<List<ImageProcessed>>(jsonImages);
+}
+
+<body id="pagebody">
+
+    <div class="container">
+        <div class="row">
+            @foreach (ImageProcessed image in images)
+            {
+                <div class="col-md-4">
+                    <div class="card mb-4 shadow-sm">
+                        <img class="card-img-top" src="data:image/jpeg;base64,@Convert.ToBase64String(image.ImageData)" alt="Card image cap">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="btn-group">
+                                    <form method="post" asp-action="LoadImage">
+                                        <input type="hidden" name="Id" value="@image.Id" />
+                                        <button type="submit" class="btn btn-sm btn-outline-secondary">View</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</body>
