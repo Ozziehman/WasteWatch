@@ -170,54 +170,101 @@ namespace WasteWatch.Controllers
 
             Image currentImage = null;
             var session = httpContextAccessor.HttpContext.Session;
-            currentImage = _context.Images.Find(Int32.Parse(session.GetString("CurrentLoadedImage")));
-            
 
+            
+  
             int currentIndex = Int32.Parse(HttpContext.Session.GetString("CurrentIndex"));
             string jsonImageModels = HttpContext.Session.GetString("ImageModels");
             string imageJson = HttpContext.Session.GetString("Image");
 
-
+            //if you have loaded multiple images from the device
             if (jsonImageModels != null) 
             {
+                //Add all image models to the imageModels list
                 imageModels = JsonConvert.DeserializeObject<List<ImageModel>>(jsonImageModels);
+                //get the raw imageData in byte form
                 rawImageDataByte = imageModels[currentIndex].ImageData;
+
+                //___________________________________________ Data is now stored in rawImageDataByte now to add the rest...
+                List<BoxModel> boxModels = JsonConvert.DeserializeObject<List<BoxModel>>(boxes);
+
+                //convert to yolo format
+                string yoloFormat = ConvertToYoloFormat(boxModels, 500, 500);
+                Console.WriteLine(yoloFormat);
+
+                _logger.LogInformation(boxes);
+
+                //make new image object and put the data from imageModel into image
+                Image image = new Image()
+                {
+                    ImageData = rawImageDataByte,
+                    Boxes = boxes,
+                    BoxesYOLO = yoloFormat
+                };
+
+                _context.Images.Add(image);
+                int result = _context.SaveChanges();
+
+
+                //var testimage = _context.Images.Find(3);
+                //var testbase64 = Convert.ToBase64String(testimage.ImageData);
+
+                if (result > 0)
+                {
+                    return Json(new { success = true, responseText = "Succesfully uploaded to db" });
+                }
+                return Json(new { success = false, responseText = "Failed to upload to db" });
             }
+
+            //If you have loaded 1 image form the db
             else if (imageJson != null)
             {
-                    imageModels.Add(JsonConvert.DeserializeObject<ImageModel>(imageJson));
-                    rawImageDataByte = imageModels[currentIndex].ImageData;
+
+                //check if image got loaded correctly
+                if (session.GetString("CurrentLoadedImage") != null)
+                {
+                    //get currentImage 'from database with proper Id
+                    currentImage = _context.Images.Find(Int32.Parse(session.GetString("CurrentLoadedImage")));
+                }
+
+                //add the image Model to the list
+                imageModels.Add(JsonConvert.DeserializeObject<ImageModel>(imageJson));
+                //Get the rawImageDataByte
+                rawImageDataByte = imageModels[currentIndex].ImageData;
+
+                //___________________________________________ Data is now stored in rawImageDataByte now to add the rest...
+                List<BoxModel> boxModels = JsonConvert.DeserializeObject<List<BoxModel>>(boxes);
+
+                //convert to yolo format
+                string yoloFormat = ConvertToYoloFormat(boxModels, 500, 500);
+                Console.WriteLine(yoloFormat);
+
+
+
+                _logger.LogInformation(boxes);
+
+                currentImage.Boxes = boxes;
+                currentImage.BoxesYOLO = yoloFormat;
+                _context.Images.Update(currentImage);
+
+                int result = _context.SaveChanges();
+
+
+                //var testimage = _context.Images.Find(3);
+                //var testbase64 = Convert.ToBase64String(testimage.ImageData);
+
+                if (result > 0)
+                {
+                    return Json(new { success = true, responseText = "Succesfully uploaded to db" });
+                }
+                return Json(new { success = false, responseText = "Failed to upload to db" });
             }
             else
             {
                 Console.WriteLine("No image found");
                 return View("Index");
             }
-           //___________________________________________ Data is now stored in rawImageDataByte now to add the rest...
-            List<BoxModel> boxModels = JsonConvert.DeserializeObject<List<BoxModel>>(boxes);
-
-            string yoloFormat = ConvertToYoloFormat(boxModels, 500, 500);
-            Console.WriteLine(yoloFormat);
-
-            
-
-            _logger.LogInformation(boxes);
-
-            currentImage.Boxes = boxes;
-            currentImage.BoxesYOLO = yoloFormat;
-            _context.Images.Update(currentImage);
-
-            int result = _context.SaveChanges();
-
-
-            //var testimage = _context.Images.Find(3);
-            //var testbase64 = Convert.ToBase64String(testimage.ImageData);
-
-            if (result > 0)
-            {
-                return Json(new { success = true, responseText = "Succesfully uploaded to db" });   
-            }
-            return Json(new { success = false, responseText = "Failed to upload to db" });
+           
 
 
         }
