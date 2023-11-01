@@ -8,6 +8,7 @@ using System;
 using Microsoft.Extensions.Logging;
 using System.IO;
 using System.IO.Compression;
+using static System.Collections.Specialized.BitVector32;
 
 
 namespace WasteWatch.Controllers
@@ -103,6 +104,7 @@ namespace WasteWatch.Controllers
                 if (int.TryParse(Id, out int IdInt))
                 {
                     var session = httpContextAccessor.HttpContext.Session;
+                    session.SetString("CurrentLoadedImage", Id);
                     var image = _context.Images.Find(IdInt);
                     if (image != null)
                     {
@@ -159,17 +161,22 @@ namespace WasteWatch.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        public IActionResult UploadDataToDb(string boxes)
+        public IActionResult UploadDataToDb(string boxes, [FromServices] IHttpContextAccessor httpContextAccessor)
         {
             byte[] rawImageDataByte;
             List<ImageModel> imageModels = new List<ImageModel>();
             //Get correct picture with the Imagemodels forms essionstorage and the current index of the list of images that is stored there
             //Raw Data of image could not be passed through AJAX because of size limitations so it gets it straight through the server side sessionstorage
 
-            int currentIndex = Int32.Parse(HttpContext.Session.GetString("CurrentIndex"));
+            Image currentImage = null;
+            var session = httpContextAccessor.HttpContext.Session;
+            currentImage = _context.Images.Find(Int32.Parse(session.GetString("CurrentLoadedImage")));
+            
 
+            int currentIndex = Int32.Parse(HttpContext.Session.GetString("CurrentIndex"));
             string jsonImageModels = HttpContext.Session.GetString("ImageModels");
             string imageJson = HttpContext.Session.GetString("Image");
+
 
             if (jsonImageModels != null) 
             {
@@ -178,8 +185,8 @@ namespace WasteWatch.Controllers
             }
             else if (imageJson != null)
             {
-                imageModels.Add(JsonConvert.DeserializeObject<ImageModel>(imageJson));
-                rawImageDataByte = imageModels[currentIndex].ImageData;
+                    imageModels.Add(JsonConvert.DeserializeObject<ImageModel>(imageJson));
+                    rawImageDataByte = imageModels[currentIndex].ImageData;
             }
             else
             {
@@ -196,15 +203,10 @@ namespace WasteWatch.Controllers
 
             _logger.LogInformation(boxes);
 
-            // Create a new Image object
-            Image image = new Image
-            {
-                ImageData = rawImageDataByte,
-                Boxes = boxes,
-                BoxesYOLO = yoloFormat
-            };
+            currentImage.Boxes = boxes;
+            currentImage.BoxesYOLO = yoloFormat;
+            _context.Images.Update(currentImage);
 
-            _context.Images.Add(image);
             int result = _context.SaveChanges();
 
 
