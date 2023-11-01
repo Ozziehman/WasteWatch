@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 using System.IO;
 using System.IO.Compression;
 using static System.Collections.Specialized.BitVector32;
-
+using Microsoft.Identity.Client;
 
 namespace WasteWatch.Controllers
 {
@@ -132,6 +132,22 @@ namespace WasteWatch.Controllers
                 Console.WriteLine("Id is null");
                 return View("Index");
             }
+        }
+
+        public IActionResult LoadProcessedGallery([FromServices] IHttpContextAccessor httpContextAccessor)
+        {
+            var images = _context.ImagesProcessed.ToList();
+
+            // Convert the list of ImageModel objects to JSON
+            var jsonImageModels = JsonConvert.SerializeObject(images);
+
+            // Get the current session
+            var session = httpContextAccessor.HttpContext.Session;
+
+            // Store the JSON representation in session
+            session.SetString("ProcessedGalleryView", jsonImageModels);
+
+            return View("ProcessedGalleryView");
         }
              
         //Next image
