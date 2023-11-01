@@ -5,7 +5,7 @@
 
 @{
     string jsonImages = Context.Session.GetString("ProcessedGalleryView");
-    Console.WriteLine(Encoding.UTF8.GetBytes(jsonImages).Length + " Byte stored in sessionstorage 'ImageModels' ");
+    Console.WriteLine(Encoding.UTF8.GetBytes(jsonImages).Length + " Byte stored in sessionstorage 'ProcessGalleryView' ");
     //Console.WriteLine(images);
     List<ImageProcessed> images = JsonConvert.DeserializeObject<List<ImageProcessed>>(jsonImages);
 }
@@ -24,9 +24,10 @@
                                 <div class="btn-group">
                                     <form method="post" asp-action="LoadImage">
                                         <input type="hidden" name="Id" value="@image.Id" />
-                                        <button type="submit" class="btn btn-sm btn-outline-secondary">View</button>
+                                        <button type="submit" class="btn btn-sm btn-outline-secondary">View/Edit</button>
                                     </form>
                                 </div>
+                                <label class="m-2">Id: @image.Id</label>
                             </div>
                         </div>
                     </div>

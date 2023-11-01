@@ -88,7 +88,7 @@ namespace WasteWatch.Controllers
             // Get the current session
             var session = httpContextAccessor.HttpContext.Session;
 
-            // Store the JSON representation in session
+            // Store all images given into sessionstorage "ImageModels"
             session.SetString("ImageModels", jsonImageModels);
             session.SetString("CurrentIndex", "0");
 
@@ -109,9 +109,12 @@ namespace WasteWatch.Controllers
                     if (image != null)
                     {
                         var jsonImage = JsonConvert.SerializeObject(image);
-
+                        //Clear the ProcessedGalleryView for less storage usage
+                        session.Remove("ProcessedGalleryView");                       
+                        //Store selected image into sessionstorage "Image"
                         session.SetString("Image", jsonImage);
                         session.SetString("CurrentIndex", "0");
+
                         ViewData["Categories"] = _context.Categories.ToList();
                         return View("LoadedImage");
                     }
@@ -144,7 +147,7 @@ namespace WasteWatch.Controllers
             // Get the current session
             var session = httpContextAccessor.HttpContext.Session;
 
-            // Store the JSON representation in session
+            // Store all images from the database in sessionstorage "ProcessedGalleryView"
             session.SetString("ProcessedGalleryView", jsonImageModels);
 
             return View("ProcessedGalleryView");
@@ -181,7 +184,7 @@ namespace WasteWatch.Controllers
         {
             byte[] rawImageDataByte;
             List<ImageModel> imageModels = new List<ImageModel>();
-            //Get correct picture with the Imagemodels forms essionstorage and the current index of the list of images that is stored there
+            //Get correct picture with the Imagemodels forms sessionstorage and the current index of the list of images that is stored there
             //Raw Data of image could not be passed through AJAX because of size limitations so it gets it straight through the server side sessionstorage
 
             ImageProcessed currentImage = null;
@@ -198,7 +201,7 @@ namespace WasteWatch.Controllers
             {
                 //Add all image models to the imageModels list
                 imageModels = JsonConvert.DeserializeObject<List<ImageModel>>(jsonImageModels);
-                //get the raw imageData in byte form
+                //get the raw imageData in byte from the imageModel at the current index
                 rawImageDataByte = imageModels[currentIndex].ImageData;
 
                 //___________________________________________ Data is now stored in rawImageDataByte now to add the rest...
@@ -232,14 +235,14 @@ namespace WasteWatch.Controllers
                 return Json(new { success = false, responseText = "Failed to upload to db" });
             }
 
-            //If you have loaded 1 image form the db
+            //If you have loaded 1 image from the db
             else if (imageJson != null)
             {
 
                 //check if image got loaded correctly
                 if (session.GetString("CurrentLoadedImage") != null)
                 {
-                    //get currentImage 'from database with proper Id
+                    //get currentImage from database with proper Id
                     currentImage = _context.ImagesProcessed.Find(Int32.Parse(session.GetString("CurrentLoadedImage")));
                 }
 
@@ -300,7 +303,7 @@ namespace WasteWatch.Controllers
                     foreach (var image in images)
                     {
                         // Create an entry in the "Images" folder for each image
-                        var entry = archive.CreateEntry($"Images/{image.Id}.jpg");
+                        var entry = archive.CreateEntry($"images/{image.Id}.jpg");
                         using (var entryStream = entry.Open())
                         using (var imageStream = new MemoryStream(image.ImageData))
                         {
@@ -311,7 +314,7 @@ namespace WasteWatch.Controllers
                     foreach (var data in yoloData)
                     {
                         // Create an entry in the "YOLOData" folder for each YOLO data file
-                        var entry = archive.CreateEntry($"YOLOData/{data.Id}_BoxesYOLO.txt");
+                        var entry = archive.CreateEntry($"labels/{data.Id}_BoxesYOLO.txt");
                         using (var entryStream = entry.Open())
                         using (var writer = new StreamWriter(entryStream))
                         {
