@@ -55,6 +55,15 @@
             let width = box.endX - box.startX;
             let height = box.endY - box.startY;
             ctx.strokeRect(box.startX, box.startY, width, height);
+
+            ctx.fillStyle = 'white';
+            ctx.fillRect(box.startX, box.startY - 25, ctx.measureText(box.name).width + 10, 25);
+
+            ctx.font = "16px Arial";
+            ctx.fillStyle = "black";
+            ctx.fillText(box.name, box.startX + 5, box.startY - 5);
         }
+
+        
     });
 });
