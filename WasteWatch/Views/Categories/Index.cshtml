@@ -18,11 +18,11 @@
     </thead>
     <tbody>
     @foreach (var item in Model) {
-        <tr style="border:solid; border-color:#485785">
+            <tr style="border:solid; border-color:#485785; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); ">
             <td style="background-color:white">
                 @Html.DisplayFor(modelItem => item.CategoryName)
             </td>
-            <td style="background-color:white">
+            <td style="background-color:white;  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); ">
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
