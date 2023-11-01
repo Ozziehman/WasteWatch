@@ -103,7 +103,7 @@ namespace WasteWatch.Controllers
                 if (int.TryParse(Id, out int IdInt))
                 {
                     var session = httpContextAccessor.HttpContext.Session;
-                    var image = _context.Images.Find(IdInt);
+                    var image = _context.ImagesProcessed.Find(IdInt);
                     if (image != null)
                     {
                         var jsonImage = JsonConvert.SerializeObject(image);
@@ -197,14 +197,14 @@ namespace WasteWatch.Controllers
             _logger.LogInformation(boxes);
 
             // Create a new Image object
-            Image image = new Image
+            ImageProcessed image = new ImageProcessed
             {
                 ImageData = rawImageDataByte,
                 Boxes = boxes,
                 BoxesYOLO = yoloFormat
             };
 
-            _context.Images.Add(image);
+            _context.ImagesProcessed.Add(image);
             int result = _context.SaveChanges();
 
 
@@ -222,8 +222,8 @@ namespace WasteWatch.Controllers
 
         public IActionResult GetImagesAndBoxesYOLOFromDb()
         {
-            var images = _context.Images.ToList();
-            var yoloData = _context.Images
+            var images = _context.ImagesProcessed.ToList();
+            var yoloData = _context.ImagesProcessed
                 .Select(image => new { Id = image.Id, BoxesYOLO = image.BoxesYOLO })
                 .ToList();
 

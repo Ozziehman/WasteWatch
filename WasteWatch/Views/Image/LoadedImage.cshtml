@@ -1,7 +1,7 @@
 ﻿@using Newtonsoft.Json;
 @using System.Text;
 
-@model Image
+@model ImageProcessed
 
 @{
     ViewData["Title"] = "LoadedImage";
@@ -10,7 +10,7 @@
     string jsonImage = Context.Session.GetString("Image");
     Console.WriteLine(Encoding.UTF8.GetBytes(jsonImage).Length + " Byte stored in sessionstorage 'Image' ");
     //Console.WriteLine(images);
-    Image image = JsonConvert.DeserializeObject<Image>(jsonImage);
+    ImageProcessed image = JsonConvert.DeserializeObject<ImageProcessed>(jsonImage);
 
     //Get the image data in bytes from the imageModel and convert it to base 64
     var imageDataBase64 = Convert.ToBase64String(image.ImageData);
