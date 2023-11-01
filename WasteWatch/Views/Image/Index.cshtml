@@ -1,6 +1,11 @@
 ﻿@{
+    //Monitoring to check if all session variables are cleared
     Context.Session.Clear();
+    Console.WriteLine(Context.Session.GetString("Image"));
     Console.WriteLine(Context.Session.GetString("ImageModels"));
+    Console.WriteLine(Context.Session.GetString("CurrentLoadedImage"));
+    Console.WriteLine(Context.Session.GetString("ProcessedGalleryView"));
+
 }
 
 @using (Html.BeginForm("UploadImages", "Image", FormMethod.Post, new { enctype = "multipart/form-data" }))
