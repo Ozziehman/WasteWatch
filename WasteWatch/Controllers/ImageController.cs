@@ -177,7 +177,7 @@ namespace WasteWatch.Controllers
             var session = httpContextAccessor.HttpContext.Session;
             session.Clear();
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Image");
         }
 
         public IActionResult UploadDataToDb(string boxes, [FromServices] IHttpContextAccessor httpContextAccessor)
