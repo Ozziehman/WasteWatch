@@ -1,5 +1,4 @@
-﻿
-$('[id^="Image_"]').each(function () {
+﻿$('[id^="Image_"]').each(async function () {
     var image = this;
     var canvas = document.getElementById("Canvas_" + image.id.replace("Image_", ""));
     var body = document.getElementById("PageBody");
@@ -11,11 +10,14 @@ $('[id^="Image_"]').each(function () {
     var boxesFromDb = document.getElementById("boxesFromDb_" + image.id.replace("Image_", "")).value;
 
     if (canvas && image) {
-        // Set the image source and draw it on the canvas when it loads
         img.src = image.src;
-        img.onload = function () {
-            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-        };
+
+        // Wait for the image to load before drawing
+        await new Promise((resolve) => {
+            img.onload = resolve;
+        });
+
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
     }
 
     body.addEventListener("mousemove", function (e) {
@@ -63,6 +65,4 @@ $('[id^="Image_"]').each(function () {
         ctx.fillStyle = "black";
         ctx.fillText(box.name, box.startX + 5, box.startY - 5);
     }
-
-        
 });
