@@ -10,6 +10,7 @@ using System.IO;
 using System.IO.Compression;
 using static System.Collections.Specialized.BitVector32;
 using Microsoft.Identity.Client;
+using Microsoft.AspNetCore.Identity;
 
 namespace WasteWatch.Controllers
 {
@@ -17,7 +18,9 @@ namespace WasteWatch.Controllers
 	{
         private readonly ApplicationDbContext _context;
         private readonly ILogger<ImageController> _logger;
+        private readonly UserManager<IdentityUser> _userManager;
 
+        
         static string ConvertToYoloFormat(List<BoxModel> boxModels, int imageWidth, int imageHeight)
         {
             string yoloFormat = "";
@@ -46,10 +49,11 @@ namespace WasteWatch.Controllers
             return yoloFormat;
         }
 
-        public ImageController(ApplicationDbContext context, ILogger<ImageController> logger)
+        public ImageController(ApplicationDbContext context, ILogger<ImageController> logger, UserManager<IdentityUser> userManager)
         {
             _context = context;
             _logger = logger;
+            _userManager = userManager;
         }
         public IActionResult Index()
 		{
@@ -235,7 +239,8 @@ namespace WasteWatch.Controllers
                 {
                     ImageData = rawImageDataByte,
                     Boxes = boxes,
-                    BoxesYOLO = yoloFormat
+                    BoxesYOLO = yoloFormat,
+                    ProcessedBy = _userManager.GetUserAsync(User).Result
                 };
 
                 _context.ImagesProcessed.Add(imageProcessed);
@@ -281,6 +286,7 @@ namespace WasteWatch.Controllers
 
                 currentImage.Boxes = boxes;
                 currentImage.BoxesYOLO = yoloFormat;
+                currentImage.ProcessedBy = _userManager.GetUserAsync(User).Result;
                 _context.ImagesProcessed.Update(currentImage);
 
                 int result = _context.SaveChanges();

@@ -1,4 +1,6 @@
-﻿namespace WasteWatch.Models
+﻿using Microsoft.AspNetCore.Identity;
+
+namespace WasteWatch.Models
 {
     public class ImageProcessed
     {
@@ -6,5 +8,6 @@
         public byte[] ImageData { get; set; }
         public string Boxes { get; set; }
         public string BoxesYOLO { get; set; }
+        public IdentityUser ProcessedBy { get; set; }
     }
 }
