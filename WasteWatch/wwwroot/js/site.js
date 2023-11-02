@@ -94,7 +94,7 @@ saveBoxButton.addEventListener("click", function () {
 });
 
 // Event listener for the "Download" button
-downloadButton.addEventListener("click", function () {
+/*downloadButton.addEventListener("click", function () {
 
 
     const jsZip = new JSZip();
@@ -124,7 +124,7 @@ downloadButton.addEventListener("click", function () {
             // Clean up by revoking the blob URL
             URL.revokeObjectURL(blobURL);
         });
-});
+});*/
 
 uploadButton.addEventListener("click", function () {
     //Store in db
