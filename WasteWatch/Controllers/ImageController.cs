@@ -31,7 +31,7 @@ namespace WasteWatch.Controllers
 		{
 			return View();
 		}
-        static string ConvertToYoloFormat(List<BoxModel> boxModels, int imageWidth, int imageHeight)
+        static string ConvertToYoloFormat(List<BoxModel> boxModels, int imageWidth, int imageHeight, ApplicationDbContext context)
         {
             string yoloFormat = "";
             foreach (var box in boxModels)
@@ -53,7 +53,7 @@ namespace WasteWatch.Controllers
                 double h = height / imageHeight;
 
                 // Append the YOLO formatted string
-                var category = _context.Categories.Where(c => c.CategoryName == box.Name).FirstOrDefault();
+                var category = context.Categories.Where(c => c.CategoryName == box.Name).FirstOrDefault();
 
                 if (category != null)
                 {
