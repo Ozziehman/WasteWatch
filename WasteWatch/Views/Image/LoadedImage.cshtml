@@ -20,39 +20,52 @@
 <body id="pagebody">
     <input id="boxesFromDb" value="@boxes" style="display:none" />
 
-    <img id="sourceImage" src="data:image/jpeg;base64,@imageDataBase64" alt="picture" style="display: none;" />
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+                <!-- Left Column -->
+                <input id="boxesFromDb" value="" style="display: none;" />
 
-    <canvas id="skiaCanvas" width="500" height="500"></canvas>
+                @if (imageDataBase64 != null)
+                {
+                    <img id="sourceImage" src="data:image/jpeg;base64,@imageDataBase64" alt="image" style="display: none;" />
+                }
 
-    <div class="input-group mb-3">
-        <select class="form-control" id="boxName" style="display: none;" aria-label="Select Box" aria-describedby="button-addon2">
-            @foreach (Category catagory in Categories)
-            {
-                <option value="@catagory.CategoryName">@catagory.CategoryName</option>
-            })
-        </select>
-        <button class="btn btn-primary" type="button" id="button-addon2" style="display: none;">Save Box</button>
-    </div>
+                <canvas id="skiaCanvas" class="img-fluid" style="max-width: 100%;" width="500" height="500"></canvas>
 
-
-    <div id="OverviewContainer">
-            <h1>Overview Id: @Context.Session.GetString("CurrentLoadedImage")</h1>
-        <div id="overview"></div>
-
-        <div id="downloadDiv">
-            @* <div class="btn btn-primary" id="downloadButton">Download</div> *@
-            <div class="btn btn-secondary" id="uploadButton">Save Image</div>
+                <div class="input-group mb-3">
+                    <select class="form-control" id="boxName" style="display: none;" aria-label="Select Box" aria-describedby="button-addon2">
+                        @foreach (Category category in Categories)
+                        {
+                            <option value="@category.CategoryName">@category.CategoryName</option>
+                        }
+                    </select>
+                    <div class="input-group-append">
+                        <button class="btn btn-primary" type="button" id="button-addon2" style="display: none;">Save Box</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <!-- Right Column -->
+                <div class="card">
+                    <div class="card-body">
+                        <h1 class="card-title">Overview</h1>
+                        <div id="overview" class="card-text"></div>
+                        <div>
+                            <button class="btn btn-secondary" id="uploadButton">Save Image</button>
+                        </div>
+                        <hr />
+                        <div id="messageBox" class="text-success" style="display: none;">Saved to database</div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <hr />
-        <div id="messageBox" style="color: green; display:none">Saved to database</div>
 
-    </div>
-
-
-    <div class="fixed-bottom fixed-right m-3" style="width:100px">
-        <form method="post" asp-action="LoadProcessedGallery">
-            <button type="submit" class="btn btn-outline-danger">STOP</button>
-        </form>
+        <div class="fixed-bottom fixed-right m-3">
+            <form method="post" asp-action="LoadProcessedGallery">
+                <button type="submit" class="btn btn-outline-danger">STOP</button>
+            </form>
+        </div>
     </div>
 </body>
 <style>
