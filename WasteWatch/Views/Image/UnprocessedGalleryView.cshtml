@@ -1,6 +1,7 @@
 ﻿@using Newtonsoft.Json;
 @using System.Text;
-@model Image
+@model List<WasteWatch.Models.Image>
+
 
 @{
     string jsonImages = Context.Session.GetString("UnprocessedGalleryView");
@@ -12,24 +13,48 @@
 <head>
     <title>Your Page Title</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            var index = 0;
+            var batchSize = 10;
+            var images = @Html.Raw(JsonConvert.SerializeObject(images));
+
+            function showImages(start, end) {
+                for (var i = start; i < end; i++) {
+                    var image = images[i];
+                    var imageElement = `
+                                <div class="col-md-4">
+                                    <div class="card mb-4 shadow-sm">
+                                        <img id="Image_${image.Id}" class="card-img-top" src="data:image/jpeg;base64,${image.BinaryData}" alt="Card image cap">
+                                        <div class="card-body">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <label class="m-2">Id: ${image.Id}</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                    $('#PageBody .row').append(imageElement);
+                }
+            }
+
+            showImages(index, Math.min(batchSize, images.length));
+
+            $('#loadMoreBtn').click(function () {
+                index += batchSize;
+                showImages(index, Math.min(index + batchSize, images.length));
+                if (index >= images.length) {
+                    $('#loadMoreBtn').hide();
+                }
+            });
+        });
+    </script>
 </head>
 <body id="PageBody">
     <div class="container">
         <div class="row">
-            @foreach (Image image in images)
-            {
-                <div class="col-md-4">
-                    <div class="card mb-4 shadow-sm">
-                        <img id="Image_@image.Id" class="card-img-top" src="data:image/jpeg;base64,@Convert.ToBase64String(image.BinaryData)" alt="Card image cap">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <label class="m-2">Id: @image.Id</label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            }
         </div>
+        <button id="loadMoreBtn" class="btn btn-primary mt-3">Load More</button>
     </div>
 </body>
 </html>

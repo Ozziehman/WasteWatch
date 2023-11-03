@@ -20,8 +20,18 @@ namespace WasteWatch.Controllers
         private readonly ILogger<ImageController> _logger;
         private readonly UserManager<IdentityUser> _userManager;
 
-        
-        static string ConvertToYoloFormat(List<BoxModel> boxModels, int imageWidth, int imageHeight)
+        public ImageController(ApplicationDbContext context, ILogger<ImageController> logger, UserManager<IdentityUser> userManager)
+        {
+            _context = context;
+            _logger = logger;
+            _userManager = userManager;
+        }
+
+        public IActionResult Index()
+		{
+			return View();
+		}
+        static string ConvertToYoloFormat(List<BoxModel> boxModels, int imageWidth, int imageHeight, ApplicationDbContext context)
         {
             string yoloFormat = "";
             foreach (var box in boxModels)
@@ -43,23 +53,21 @@ namespace WasteWatch.Controllers
                 double h = height / imageHeight;
 
                 // Append the YOLO formatted string
-                yoloFormat += $"{box.Name} {x} {y} {w} {h}\n";
+                var category = context.Categories.Where(c => c.CategoryName == box.Name).FirstOrDefault();
+
+                if (category != null)
+                {
+                    yoloFormat += $"{category.Id} {x} {y} {w} {h}\n";
+                    // Do something with the yoloFormat string
+                }
+                else
+                {
+                    // Handle the case when no category is found for the given box.Name.
+                }
             }
 
             return yoloFormat;
         }
-
-        public ImageController(ApplicationDbContext context, ILogger<ImageController> logger, UserManager<IdentityUser> userManager)
-        {
-            _context = context;
-            _logger = logger;
-            _userManager = userManager;
-        }
-        public IActionResult Index()
-		{
-			return View();
-		}
-
 
         [HttpPost]
         public IActionResult UploadImages(List<IFormFile> files, [FromServices] IHttpContextAccessor httpContextAccessor)
@@ -174,6 +182,53 @@ namespace WasteWatch.Controllers
             return View("UnprocessedGalleryView");
         }
 
+        public IActionResult LoadImagesFromDB(int amount, [FromServices] IHttpContextAccessor httpContextAccessor, [FromServices] ApplicationDbContext dbContext)
+        {
+            var totalImagesCount = dbContext.Images.Count();
+
+            if (amount <= 0)
+            {
+                // Set amount to totalImagesCount if it's 0
+                amount = totalImagesCount;
+            }
+            else if (amount > totalImagesCount)
+            {
+                // Set amount to totalImagesCount if it's greater than the collection size
+                amount = totalImagesCount;
+            }
+
+            // Fetch the desired amount of images from the database
+            List<Image> imagesFromDB = dbContext.Images.Take(amount).ToList();
+
+            // Convert the list of Image objects to ImageModel objects
+            List<ImageModel> imageModels = new List<ImageModel>();
+            foreach (var image in imagesFromDB)
+            {
+                imageModels.Add(new ImageModel
+                {
+                    ImageName = "Name", // Set the appropriate image name
+                    ImageData = image.BinaryData
+                });
+            }
+
+            // Convert the list of ImageModel objects to JSON
+            var jsonImages = JsonConvert.SerializeObject(imageModels);
+
+            // Get the current session
+            var session = httpContextAccessor.HttpContext.Session;
+
+            // Store the fetched images into session storage "ImageModels"
+            session.SetString("ImageModels", jsonImages);
+            session.SetString("CurrentIndex", "0");
+
+            ViewData["Categories"] = _context.Categories.ToList();
+
+            // Pass the first ImageModel to the view
+            return View("ImageDisplay", imageModels.FirstOrDefault());
+        }
+
+
+
         //Next image
         public IActionResult NextImagePage([FromServices] IHttpContextAccessor httpContextAccessor)
         {
@@ -229,7 +284,7 @@ namespace WasteWatch.Controllers
                 List<BoxModel> boxModels = JsonConvert.DeserializeObject<List<BoxModel>>(boxes);
 
                 //convert to yolo format
-                string yoloFormat = ConvertToYoloFormat(boxModels, 500, 500);
+                string yoloFormat = ConvertToYoloFormat(boxModels, 500, 500, _context);
                 Console.WriteLine(yoloFormat);
 
                 _logger.LogInformation(boxes);
@@ -277,7 +332,7 @@ namespace WasteWatch.Controllers
                 List<BoxModel> boxModels = JsonConvert.DeserializeObject<List<BoxModel>>(boxes);
 
                 //convert to yolo format
-                string yoloFormat = ConvertToYoloFormat(boxModels, 500, 500);
+                string yoloFormat = ConvertToYoloFormat(boxModels, 500, 500, _context);
                 Console.WriteLine(yoloFormat);
 
 

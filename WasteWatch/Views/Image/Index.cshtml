@@ -16,31 +16,46 @@
     </div>
     <hr />
     <button type="submit" class="btn btn-primary" id="uploadButton" disabled>Upload Image(s)</button>
-
 }
+
 
 <div id="imagePreview"></div>
 
-<div class="fixed-bottom fixed-right m-3">
+<div class="fixed-bottom" style="right: 20px; margin: 3px; width: fit-content;">
     <form method="post" asp-action="GetImagesAndBoxesYOLOFromDb">
         <button type="submit" class="btn btn-primary" id="downloadButton">Download Image Data</button>
     </form>
-
-   @*  <form method="post" asp-controller="Image" asp-action="LoadImage" style="margin-top: 10px;">
+    <!--
+    <form method="post" asp-controller="Image" asp-action="LoadImage" style="margin-top: 10px;">
         <div class="input-group">
             <input type="text" name="Id" class="form-control" placeholder="Enter Image ID" />
             <div class="input-group-append">
                 <button type="submit" class="btn btn-primary">Load Image</button>
             </div>
         </div>
-    </form> *@
+    </form>
+    -->
     <form method="post" asp-controller="Image" asp-action="LoadProcessedGallery" style="margin-top: 10px;">
-            <button type="submit" class="btn btn-primary">Processed Gallery View</button>
+        <button type="submit" class="btn btn-primary">Processed Gallery View</button>
     </form>
     <form method="post" asp-controller="Image" asp-action="LoadUnprocessedGallery" style="margin-top: 10px;">
         <button type="submit" class="btn btn-primary">Unprocessed Gallery View</button>
     </form>
 </div>
+
+<div style="position: fixed; bottom: 20px; right: 20px; display: flex; flex-direction: column;">
+    <form method="post" asp-action="LoadImagesFromDB">
+        <button type="submit" class="btn btn-primary" name="amount" value="10">Load 10 Images</button>
+    </form>
+    <form method="post" asp-action="LoadImagesFromDB">
+        <button type="submit" class="btn btn-primary" name="amount" value="50">Load 50 Images</button>
+    </form>
+    <form method="post" asp-action="LoadImagesFromDB">
+        <button type="submit" class="btn btn-primary" name="amount" value="0">Load All Images</button>
+    </form>
+</div>
+
+
 
 
 @section Scripts {
