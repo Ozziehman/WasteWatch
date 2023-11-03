@@ -65,18 +65,6 @@ namespace WasteWatch.API.Controllers
         }
 
 
-        [HttpPut("{id}")]
-        public IActionResult UpdateImage(int id, Image image)
-        {
-            if (id != image.Id)
-            {
-                return BadRequest();
-            }
-
-            _imageRepository.UpdateImage(image);
-            return NoContent();
-        }
-
         [HttpDelete("{id}")]
         public IActionResult DeleteImage(int id)
         {
