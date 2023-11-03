@@ -190,13 +190,17 @@ namespace WasteWatch.Controllers
 
             if (amount <= 0)
             {
-                // Set amount to totalImagesCount if it's 0
                 amount = totalImagesCount;
             }
             else if (amount > totalImagesCount)
             {
-                // Set amount to totalImagesCount if it's greater than the collection size
                 amount = totalImagesCount;
+            }
+
+            if (totalImagesCount == 0)
+            {
+                //No images found so no page with an image
+                return View("Index");
             }
 
             // Fetch the desired amount of images from the database
@@ -208,7 +212,7 @@ namespace WasteWatch.Controllers
             {
                 imageModels.Add(new ImageModel
                 {
-                    ImageName = "Name", // Set the appropriate image name
+                    ImageName = "Name",
                     ImageData = image.BinaryData
                 });
             }
@@ -226,8 +230,9 @@ namespace WasteWatch.Controllers
             ViewData["Categories"] = _context.Categories.ToList();
 
             // Pass the first ImageModel to the view
-            return View("ImageDisplay", imageModels.FirstOrDefault());
+            return View("ImageDisplay");
         }
+
 
 
 
