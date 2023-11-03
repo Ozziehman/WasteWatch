@@ -188,6 +188,15 @@ namespace WasteWatch.Controllers
         {
             var totalImagesCount = _context.Images.Count();
 
+            if (amount <= 0)
+            {
+                amount = totalImagesCount;
+            }
+            else if (amount > totalImagesCount)
+            {
+                amount = totalImagesCount;
+            }
+
             if (totalImagesCount == 0)
             {
                 //No images found so no page with an image

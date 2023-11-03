@@ -47,15 +47,17 @@
             <div class="col-md-4">
                 <!-- Right Column -->
                 <div class="card">
-                    <div  class="card-body">
+                    <div class="card-body" style="max-height: 500px; overflow-y: auto;">
                         <h1 class="card-title">Overview</h1>
                         <div id="overview" class="card-text"></div>
-                        <div>
-                            <button class="btn btn-secondary" id="uploadButton">Save Image</button>
-                        </div>
-                        <hr />
-                        <div id="messageBox" class="text-success" style="display: none;">Saved to database</div>
                     </div>
+                </div>
+                <div class="text-center mt-3">
+                    <button class="btn btn-secondary" id="uploadButton">Save Image</button>
+                </div>
+                <div class="text-center mt-3">
+                    <hr />
+                    <div id="messageBox" class="text-success" style="display: none;">Saved to database</div>
                 </div>
             </div>
         </div>
@@ -69,7 +71,7 @@
             }
         </div>
 
-        <div class="fixed-bottom fixed-right m-3">
+        <div class="fixed-bottom fixed-right m-3" style="z-index:0">
             <form method="post" asp-action="StopImagePage">
                 <button type="submit" class="btn btn-outline-danger">STOP</button>
             </form>
