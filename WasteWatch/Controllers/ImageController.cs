@@ -159,6 +159,8 @@ namespace WasteWatch.Controllers
 
             // Get the current session
             var session = httpContextAccessor.HttpContext.Session;
+            //Clear the Image storage to free up space
+            session.Remove("Image");
 
             // Store all images from the database in sessionstorage "ProcessedGalleryView"
             session.SetString("ProcessedGalleryView", jsonImageModels);
