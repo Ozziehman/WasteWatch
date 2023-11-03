@@ -52,17 +52,17 @@ namespace WasteWatch.Controllers
                 double w = width / imageWidth;
                 double h = height / imageHeight;
 
-                // Append the YOLO formatted string
+                //convert CategoryName to Id for YOLO format
                 var category = context.Categories.Where(c => c.CategoryName == box.Name).FirstOrDefault();
 
                 if (category != null)
                 {
                     yoloFormat += $"{category.Id} {x} {y} {w} {h}\n";
-                    // Do something with the yoloFormat string
+                  
                 }
                 else
                 {
-                    // Handle the case when no category is found for the given box.Name.
+                    Console.WriteLine("Error making YOLO format");
                 }
             }
 
@@ -184,9 +184,9 @@ namespace WasteWatch.Controllers
             return View("UnprocessedGalleryView");
         }
 
-        public IActionResult LoadImagesFromDB(int amount, [FromServices] IHttpContextAccessor httpContextAccessor, [FromServices] ApplicationDbContext dbContext)
+        public IActionResult LoadImagesFromDB(int amount, [FromServices] IHttpContextAccessor httpContextAccessor)
         {
-            var totalImagesCount = dbContext.Images.Count();
+            var totalImagesCount = _context.Images.Count();
 
             if (amount <= 0)
             {
@@ -200,7 +200,7 @@ namespace WasteWatch.Controllers
             }
 
             // Fetch the desired amount of images from the database
-            List<Image> imagesFromDB = dbContext.Images.Take(amount).ToList();
+            List<Image> imagesFromDB = _context.Images.Take(amount).ToList();
 
             // Convert the list of Image objects to ImageModel objects
             List<ImageModel> imageModels = new List<ImageModel>();
