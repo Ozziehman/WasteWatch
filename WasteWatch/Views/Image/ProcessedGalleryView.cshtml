@@ -3,6 +3,7 @@
 @model Image
 
 @{
+    ViewData["Title"] = "ProcessedImageGallery";
     string jsonImages = Context.Session.GetString("ProcessedGalleryView");
     Console.WriteLine(Encoding.UTF8.GetBytes(jsonImages).Length + " Byte stored in sessionstorage 'ProcessedGalleryView' ");
     List<ImageProcessed> images = JsonConvert.DeserializeObject<List<ImageProcessed>>(jsonImages);
