@@ -4,6 +4,7 @@
 
 
 @{
+    ViewData["Title"] = "UnprocessedImageGallery";
     string jsonImages = Context.Session.GetString("UnprocessedGalleryView");
     List<Image> images = JsonConvert.DeserializeObject<List<Image>>(jsonImages);
 }
