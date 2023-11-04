@@ -8,6 +8,11 @@
 
 }
 
+@if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+{
+    <div class="alert alert-danger">@ViewBag.ErrorMessage</div>
+}
+
 @using (Html.BeginForm("UploadImages", "Image", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     <div class="form-group">
