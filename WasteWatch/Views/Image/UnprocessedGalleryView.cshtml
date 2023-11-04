@@ -11,6 +11,10 @@
 <!DOCTYPE html>
 <html>
 <head>
+    @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+    {
+        <div class="alert alert-danger">@ViewBag.ErrorMessage</div>
+    }
     <title>Your Page Title</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>

@@ -153,7 +153,10 @@ namespace WasteWatch.Controllers
         public IActionResult LoadProcessedGallery([FromServices] IHttpContextAccessor httpContextAccessor)
         {
             var images = _context.ImagesProcessed.ToList();
-
+            if (images.Count() == 0)
+            {
+                ViewBag.ErrorMessage = "No images found in the database";
+            }
             // Convert the list of ImageModel objects to JSON
             var jsonImageModels = JsonConvert.SerializeObject(images);
 
@@ -171,10 +174,13 @@ namespace WasteWatch.Controllers
         public IActionResult LoadUnprocessedGallery([FromServices] IHttpContextAccessor httpContextAccessor)
         {
             var images = _context.Images.ToList();
-
+            if (images.Count() == 0)
+            {
+                ViewBag.ErrorMessage = "No images found in the database";
+            }
             // Convert the list of ImageModel objects to JSON
             var jsonImageModels = JsonConvert.SerializeObject(images);
-
+            
             // Get the current session
             var session = httpContextAccessor.HttpContext.Session;
 
@@ -200,6 +206,7 @@ namespace WasteWatch.Controllers
             if (totalImagesCount == 0)
             {
                 //No images found so no page with an image
+                ViewBag.ErrorMessage = "No images found in the database";
                 return View("Index");
             }
 
@@ -229,7 +236,6 @@ namespace WasteWatch.Controllers
 
             ViewData["Categories"] = _context.Categories.ToList();
 
-            // Pass the first ImageModel to the view
             return View("ImageDisplay");
         }
 
@@ -279,7 +285,7 @@ namespace WasteWatch.Controllers
             string jsonImageModels = HttpContext.Session.GetString("ImageModels");
             string imageJson = HttpContext.Session.GetString("Image");
 
-            //if you have loaded multiple images from the device
+            //if you have loaded multiple images from the device or db
             if (jsonImageModels != null) 
             {
                 //Add all image models to the imageModels list
@@ -373,6 +379,7 @@ namespace WasteWatch.Controllers
 
         }
 
+        //download the images and boxyolodata from the database into a zip file
         public IActionResult GetImagesAndBoxesYOLOFromDb()
         {
             var images = _context.ImagesProcessed.ToList();

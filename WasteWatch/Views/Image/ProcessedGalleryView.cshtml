@@ -12,10 +12,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Your Page Title</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
+
 <body id="PageBody">
+    @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+    {
+        <div class="alert alert-danger">@ViewBag.ErrorMessage</div>
+    }
     <div class="container">
         <div class="row">
             @foreach (ImageProcessed image in images)
