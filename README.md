@@ -1,10 +1,5 @@
 # Project Name
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![GitHub stars](https://img.shields.io/github/stars/Ozziehman/WasteWatch.svg)](https://github.com/Ozziehman/WasteWatch/stargazers)
-[![GitHub forks](https://img.shields.io/github/forks/Ozziehman/WasteWatch.svg)](https://github.com/Ozziehman/WasteWatch/network)
-[![GitHub issues](https://img.shields.io/github/issues/Ozziehman/WasteWatch.svg)](https://github.com/Ozziehman/WasteWatch/issues)
-
 The wastewatch web application functions as a software for people to select items on images with selectionboxes. These boxes are then labled and can be dowloaded for use, for example: Training an AI for object recognition
 
 ## Table of Contents
