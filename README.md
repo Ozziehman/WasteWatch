@@ -15,7 +15,7 @@ The wastewatch web application functions as a software for people to select item
 
 - Make sure you have [.NET Core](https://dotnet.microsoft.com/en-us/download) installed.
 - You'll need a database connection string for configuration.
-- 
+
 #### Database Configuration
 
 1. Edit the `appsettings.json` file and replace `your_connection_string_here` with your actual database connection string:
