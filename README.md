@@ -1,5 +1,5 @@
 # WasteWatch
-The wastewatch web application functions as a software for people to select items on images with selectionboxes. These boxes are then labled and can be dowloaded for use, for example: Training an AI for object recognition
+WasteWatch is a web application designed to simplify image annotation, enabling the user to draw boxes arouand items, label them, and prepare them for use in training AI models to recognize trash.
 
 ## Table of Contents
 
