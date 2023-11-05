@@ -79,7 +79,7 @@ Displays a page with all the processed images with all the boxes drawn onto them
 #### Unrpocessed Gallery View
 Displays a page with all the unprocessed images that are loaded from the database, these images were added via the API.
 
-####Category CRUD
+#### Category CRUD
 This page has all the CRUD functionalities for `Category`
 
 
