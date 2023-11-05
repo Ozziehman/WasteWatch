@@ -7,6 +7,7 @@ The wastewatch web application functions as a software for people to select item
 - [Installation](#installation)
 - [Usage](#usage)
 - [Contributors](#contributors)
+- [License](#license)
 
 ## Installation
 -Enter your desired databaseconnectionstring in the appsettings.json (be sure to edit the variable entered into the connection in the program.cs too).
@@ -21,3 +22,7 @@ The wastewatch web application functions as a software for people to select item
 - [Menno Rompelberg](https://github.com/MasterDisaster7)
 - [Axel Frederiks](https://github.com/ProgrammerGhostPrK)
 - [Jonah Siemers](https://github.com/Doomayy)
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
