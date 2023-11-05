@@ -32,8 +32,24 @@ The wastewatch web application functions as a software for people to select item
 
 
 ## Usage
+Using the Application
+1. Launch the application by running WasteWatch.
+2. Open a web browser and navigate to http://localhost:your_port to access the application.
+3. Use the application's user interface to upload images or load images from the database to select items in those images with selection boxes.
+4. Label the selected items as needed.
+5. Download the labeled items for your use.
+6. Explore the different functionalities of loading in unprocessed and processediamges, uploading images from your device and loading images from the database uploaded via the API.
 
+Using the API
+1. The Category part is straightforward.
+2. To upload an image to the database navigate to the Image part and select the POST functionality, click try it out. Configure the request body as follows( fill `your_base64_string` with you base64 that represents your image):
 
+```json
+{
+  "id": 0,
+  "apiBase64Data": "your_base64_string"
+}
+```
 
 ## Contributors
 - [Oscar Theelen](https://github.com/Ozziehman)
