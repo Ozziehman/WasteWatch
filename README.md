@@ -1,5 +1,4 @@
-# Project Name
-
+# WasteWatch
 The wastewatch web application functions as a software for people to select items on images with selectionboxes. These boxes are then labled and can be dowloaded for use, for example: Training an AI for object recognition
 
 ## Table of Contents
@@ -63,7 +62,7 @@ The wastewatch web application functions as a software for people to select item
 
 
 
-# Application_Features
+## Application_Features
 #### Login/Register
 This will keep track of who edited what in the database.
 #### Upload Images from device
@@ -86,7 +85,7 @@ This page has all the CRUD functionalities for `Category`
 
 
 
-# API_Features
+## API_Features
 #### Category
 1. GET
 2. POST
