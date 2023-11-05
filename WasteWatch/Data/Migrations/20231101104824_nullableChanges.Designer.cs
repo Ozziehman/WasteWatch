@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WasteWatch.Data;
 
@@ -11,9 +12,11 @@ using WasteWatch.Data;
 namespace WasteWatch.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231101104824_nullableChanges")]
+    partial class nullableChanges
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -346,12 +349,7 @@ namespace WasteWatch.Data.Migrations
                         .IsRequired()
                         .HasColumnType("varbinary(max)");
 
-                    b.Property<string>("ProcessedById")
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("ProcessedById");
 
                     b.ToTable("ImagesProcessed");
                 });
@@ -405,15 +403,6 @@ namespace WasteWatch.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("WasteWatch.Models.ImageProcessed", b =>
-                {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "ProcessedBy")
-                        .WithMany()
-                        .HasForeignKey("ProcessedById");
-
-                    b.Navigation("ProcessedBy");
                 });
 #pragma warning restore 612, 618
         }

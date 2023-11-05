@@ -1,7 +1,7 @@
 ﻿@using Newtonsoft.Json;
 @using System.Text;
 
-@model Image
+@model ImageProcessed;
 
 @{
     ViewData["Title"] = "LoadedImage";
@@ -10,7 +10,7 @@
     string jsonImage = Context.Session.GetString("Image");
     Console.WriteLine(Encoding.UTF8.GetBytes(jsonImage).Length + " Byte stored in sessionstorage 'Image' ");
     //Console.WriteLine(images);
-    Image image = JsonConvert.DeserializeObject<Image>(jsonImage);
+    ImageProcessed image = JsonConvert.DeserializeObject<ImageProcessed>(jsonImage);
 
     //Get the image data in bytes from the imageModel and convert it to base 64
     var imageDataBase64 = Convert.ToBase64String(image.ImageData);
@@ -18,69 +18,84 @@
     var Categories = ViewData["Categories"] as List<Category>;
 }
 <body id="pagebody">
-<input id="boxesFromDb" value="@boxes" style="display:none" />
+    <input id="boxesFromDb" value="@boxes" style="display:none" />
 
-<img id="sourceImage" src="data:image/jpeg;base64,@imageDataBase64" alt="picture" style="display: none;" />
+    <div class="container">
+        <p>Draw boxes from top-left to bottom-right</p>
+        <div class="row">
+            <div class="col-md-8">
+                <!-- Left Column -->
+                <input id="boxesFromDb" value="" style="display: none;" />
 
-<canvas id="skiaCanvas" width="500" height="500"></canvas>
+                @if (imageDataBase64 != null)
+                {
+                    <img id="sourceImage" src="data:image/jpeg;base64,@imageDataBase64" alt="image" style="display: none;" />
+                }
 
-<div class="input-group mb-3">
-    <select class="form-control" id="boxName" style="display: none;" aria-label="Select Box" aria-describedby="button-addon2">
-        @foreach (Category catagory in Categories)
-        {
-            <option value="@catagory.CategoryName">@catagory.CategoryName</option>
-        })
-    </select>
-    <button class="btn btn-primary" type="button" id="button-addon2" style="display: none;">Save Box</button>
-</div>
+                <canvas id="skiaCanvas" class="img-fluid" style="max-width: 100%;" width="500" height="500"></canvas>
 
-    <style>
-        #OverviewContainer {
-            border: 1px solid #ffffff;
-            border-radius: 5px;
-            padding: 20px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            text-align: center;
-            overflow: auto;
-        }
+                <div class="input-group mb-3">
+                    <select class="form-control" id="boxName" style="display: none;" aria-label="Select Box" aria-describedby="button-addon2">
+                        @foreach (Category category in Categories)
+                        {
+                            <option value="@category.CategoryName">@category.CategoryName</option>
+                        }
+                    </select>
+                    <div class="input-group-append">
+                        <button class="btn btn-primary" type="button" id="button-addon2" style="display: none;">Save Box</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <!-- Right Column -->
+                <div class="card">
+                    <div class="card-body" style="max-height: 500px; overflow-y: auto;">
+                        <h1 class="card-title">Overview - Id:@image.Id</h1>
+                        <div id="overview" class="card-text"></div>
+                    </div>
+                </div>
+                <div class="text-center mt-3">
+                    <button class="btn btn-secondary" id="uploadButton">Save Image</button>
+                </div>
+                <div class="text-center mt-3">
+                    <hr />
+                    <div id="messageBox" class="text-success" style="display: none;">Saved to database</div>
+                </div>
+            </div>
+        </div>
 
-        .overview-box {
-            border: 1px #9FA6B2;
-            border-radius: 3px;
-            padding: 3px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
-
-        #skiaCanvas {
-            border: 2px solid #ffffff;
-            border-radius: 5px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-        }
-
-    </style>
-
-<div id="OverviewContainer">
-        <h1>Overview Id: @Context.Session.GetString("CurrentLoadedImage")</h1>
-    <div id="overview"></div>
-
-    <div id="downloadDiv">
-            <br/>
-        <div class="btn btn-primary" id="downloadButton">Download</div>
-        <div class="btn btn-secondary" id="uploadButton">Upload To Db</div>
+        <div class="fixed-bottom fixed-right m-3" style="z-index:0">
+            <form method="post" asp-action="LoadProcessedGallery">
+                <button type="submit" class="btn btn-outline-danger">STOP</button>
+            </form>
+        </div>
     </div>
-        <br/>
-    <div id="messageBox" style="color: green; display:none">Uploaded to database</div>
-
-</div>
-
-
-<div class="fixed-bottom fixed-right m-3" style="width:100px">
-    <form method="post" asp-action="StopImagePage">
-        <button type="submit" class="btn btn-outline-danger">STOP</button>
-    </form>
-</div>
 </body>
+<style>
+    #OverviewContainer {
+        border: 1px solid #ffffff;
+        border-radius: 5px;
+        padding: 20px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        text-align: center;
+        overflow: auto;
+    }
 
+    .overview-box {
+        border: 1px #9FA6B2;
+        border-radius: 3px;
+        padding: 3px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+
+    #skiaCanvas {
+        border: 2px solid #ffffff;
+        border-radius: 5px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+</style>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>

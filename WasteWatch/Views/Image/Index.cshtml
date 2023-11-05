@@ -1,7 +1,19 @@
 ﻿@{
-    ViewData["Title"] = "Index";
+
+
+    ViewData["Title"] = "Image";
+    //Monitoring to check if all session variables are cleared
     Context.Session.Clear();
+    Console.WriteLine(Context.Session.GetString("Image"));
     Console.WriteLine(Context.Session.GetString("ImageModels"));
+    Console.WriteLine(Context.Session.GetString("CurrentLoadedImage"));
+    Console.WriteLine(Context.Session.GetString("ProcessedGalleryView"));
+    
+}
+
+@if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+{
+    <div class="alert alert-danger">@ViewBag.ErrorMessage</div>
 }
 
 @using (Html.BeginForm("UploadImages", "Image", FormMethod.Post, new { enctype = "multipart/form-data" }))
@@ -12,16 +24,22 @@
     </div>
     <hr />
     <button type="submit" class="btn btn-primary" id="uploadButton" disabled>Upload Image(s)</button>
-
 }
+
 
 <div id="imagePreview"></div>
 
-<div class="fixed-bottom fixed-right m-3">
+<div class="fixed-bottom" style="right: 20px; margin: 3px; width: fit-content;">
     <form method="post" asp-action="GetImagesAndBoxesYOLOFromDb">
-        <button type="submit" class="btn btn-primary" id="downloadButton">Download Image Data</button>
+        <button type="submit" class="btn btn-primary" id="downloadButton" data-toggle="tooltip" title="Downloads all Images with box Coordinates in 1 zip folder.">Download Image Data</button>
     </form>
-
+    <form method="post" asp-controller="Image" asp-action="LoadProcessedGallery" style="margin-top: 10px;">
+        <button type="submit" class="btn btn-primary" data-toggle="tooltip" title="View gallery of processed images with boxes drawn on them.">Processed Gallery View</button>
+    </form>
+    <form method="post" asp-controller="Image" asp-action="LoadUnprocessedGallery" style="margin-top: 10px;">
+        <button type="submit" class="btn btn-primary" data-toggle="tooltip" title="View gallery of empty images from the database, this gallery is filled via the WasteWatchAPI.">Unprocessed Gallery View</button>
+    </form>
+    <!--
     <form method="post" asp-controller="Image" asp-action="LoadImage" style="margin-top: 10px;">
         <div class="input-group">
             <input type="text" name="Id" class="form-control" placeholder="Enter Image ID" />
@@ -30,7 +48,21 @@
             </div>
         </div>
     </form>
+    -->
 </div>
+
+<div style="position: fixed; bottom: 20px; right: 20px; display: flex; flex-direction: column;">
+    <form method="post" asp-action="LoadImagesFromDB">
+        <button type="submit" class="btn btn-primary" name="amount" value="10" data-toggle="tooltip" title="Load 10 Images from the database for drawing boxes.">Load 10 Images</button>
+    </form>
+    <form method="post" asp-action="LoadImagesFromDB">
+        <button type="submit" class="btn btn-primary" name="amount" value="50" data-toggle="tooltip" title="Load 50 Images from the database for drawing boxes.">Load 50 Images</button>
+    </form>
+    <form method="post" asp-action="LoadImagesFromDB">
+        <button type="submit" class="btn btn-primary" name="amount" value="0" data-toggle="tooltip" title="Load all Images from the database for drawing boxes.">Load All Images</button>
+    </form>
+</div>
+
 
 
 @section Scripts {
@@ -42,6 +74,11 @@
     </style>
 
     <script>
+
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+
         document.addEventListener("DOMContentLoaded", function () {
             const fileInput = document.querySelector("#files");
             const imagePreview = document.querySelector("#imagePreview");

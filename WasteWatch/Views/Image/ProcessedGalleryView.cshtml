@@ -1,0 +1,51 @@
+﻿@using Newtonsoft.Json;
+@using System.Text;
+@model Image
+
+@{
+    ViewData["Title"] = "ProcessedImageGallery";
+    string jsonImages = Context.Session.GetString("ProcessedGalleryView");
+    Console.WriteLine(Encoding.UTF8.GetBytes(jsonImages).Length + " Byte stored in sessionstorage 'ProcessedGalleryView' ");
+    List<ImageProcessed> images = JsonConvert.DeserializeObject<List<ImageProcessed>>(jsonImages);
+
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<body id="PageBody">
+    @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+    {
+        <div class="alert alert-danger">@ViewBag.ErrorMessage</div>
+    }
+    <div class="container">
+        <div class="row">
+            @foreach (ImageProcessed image in images)
+            {
+                <div class="col-md-4">
+                    <input id="boxesFromDb_@image.Id" value="@image.Boxes" style="display:none">
+                    <div class="card mb-4 shadow-sm">
+                        <img id="Image_@image.Id" class="card-img-top" src="data:image/jpeg;base64,@Convert.ToBase64String(image.ImageData)" alt="Card image cap" style="display:none">
+                        <canvas id="Canvas_@image.Id" width="500" height="500"></canvas>
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <form method="post" asp-action="LoadImage">
+                                        <input type="hidden" name="Id" value="@image.Id" />
+                                        <button type="submit" class="btn btn-md btn-outline-secondary">View/Edit</button>
+                                    </form>
+                                </div>
+                                <label class="m-2">Id: @image.Id</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</body>
+<script src="~/js/imageLoadWithBox.js"></script>
+</html>

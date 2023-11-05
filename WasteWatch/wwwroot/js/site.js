@@ -9,7 +9,6 @@ var img = new Image(); // Create a new image object
 var boxNameInput = document.getElementById('boxName'); // Get the input element for box name
 var saveBoxButton = document.getElementById('button-addon2'); // Get the "Save Box" button
 var overview = document.getElementById('overview'); // Get the overview element
-var downloadButton = document.getElementById('downloadButton'); // Get the "Download" button
 var uploadButton = document.getElementById('uploadButton'); // Get the "Upload" button
 var boxes = []; // An array to store box data with the format {name, startX, startY, endX, endY
 var body = document.getElementById("pagebody");
@@ -94,7 +93,7 @@ saveBoxButton.addEventListener("click", function () {
 });
 
 // Event listener for the "Download" button
-downloadButton.addEventListener("click", function () {
+/*downloadButton.addEventListener("click", function () {
 
 
     const jsZip = new JSZip();
@@ -124,7 +123,7 @@ downloadButton.addEventListener("click", function () {
             // Clean up by revoking the blob URL
             URL.revokeObjectURL(blobURL);
         });
-});
+});*/
 
 uploadButton.addEventListener("click", function () {
     //Store in db
