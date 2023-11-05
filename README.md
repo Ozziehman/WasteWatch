@@ -6,6 +6,8 @@ The wastewatch web application functions as a software for people to select item
 
 - [Installation](#installation)
 - [Usage](#usage)
+- [Application_Features](#application_features)
+- [API_Features](#api_features)
 - [Contributors](#contributors)
 - [License](#license)
 
@@ -28,7 +30,10 @@ The wastewatch web application functions as a software for people to select item
 }
 ```
 2. Make sure that in the `Program.cs` the string entered into the connection matches your desired connectionstring in the `appsettings.json`:
-3. Run update-database in the nuget console.
+3. Run update-database in the package manager console to build the database.
+
+
+
 
 
 ## Usage
@@ -36,12 +41,13 @@ The wastewatch web application functions as a software for people to select item
 #### Using the Application
 1. Launch the application by running WasteWatch.
 2. Open a web browser and navigate to http://localhost:your_port to access the application.
-3. Use the application's user interface to upload images or load images from the database to select items in those images with selection boxes.
-4. Label the selected items as needed.
-5. Press `Save Box` for each box.
-6. Press `Save Image` to upload/update the image in the database.
-7. On the page `Image` you can download all images and boxes in a zip file.
-8. Explore the different functionalities of loading in unprocessed and processediamges, uploading images from your device and loading images from the database uploaded via the API.
+3. Log into an account or register if you do not have an account.
+4. Use the application's user interface to upload images or load images from the database to select items in those images with selection boxes.
+5. Label the selected items as needed.
+6. Press `Save Box` for each box.
+7. Press `Save Image` to upload/update the image in the database.
+8. On the page `Image` you can download all images and boxes in a zip file.
+9. Explore the different functionalities of loading in unprocessed and processediamges, uploading images from your device and loading images from the database uploaded via the API.
 
 #### Using the API
 1. The Category part is straightforward.
@@ -54,11 +60,53 @@ The wastewatch web application functions as a software for people to select item
 }
 ```
 
+
+
+
+# Application_Features
+#### Login/Register
+This will keep track of who edited what in the database.
+#### Upload Images from device
+#### Load 10 Images
+Loads the first 10 unprocessed images from the database that were added via API.
+#### Load 50 Images
+Loads the first 50 unprocessed images from the database that were added via API.
+#### Load All Images
+Loads all unprocessed images from the database that were added via API.
+#### Download Image Data
+Donwloads a .zip file with the folders: `images` and `labels` with the images and the labels added to their respective folder with matching id's.
+#### Processed Gallery View
+Displays a page with all the processed images with all the boxes drawn onto them, you can click the view/edit button under each image to update it.
+#### Unrpocessed Gallery View
+Displays a page with all the unprocessed images that are loaded from the database, these images were added via the API.
+
+
+
+
+# API_Features
+#### Category
+1. GET
+2. POST
+3. GET{id}
+4. PUT
+5. DELETE
+#### Image
+1. GET
+2. POST
+3. GET{id}
+4. DELETE
+
+
+
+
 ## Contributors
 - [Oscar Theelen](https://github.com/Ozziehman)
 - [Menno Rompelberg](https://github.com/MasterDisaster7)
 - [Axel Frederiks](https://github.com/ProgrammerGhostPrK)
 - [Jonah Siemers](https://github.com/Doomayy)
+
+
+
 
 ## License
 
