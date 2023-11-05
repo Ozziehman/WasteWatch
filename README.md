@@ -1,5 +1,5 @@
 # WasteWatch
-WasteWatch is a web application designed to simplify image annotation, enabling the user to draw boxes arouand items, label them, and prepare them for use in training AI models to recognize trash.
+WasteWatch is a web application designed to simplify image annotation, enabling the user to draw boxes around items, label them, and prepare them for use in training AI models to recognize trash.
 
 ## Table of Contents
 
