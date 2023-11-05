@@ -27,7 +27,7 @@ The wastewatch web application functions as a software for people to select item
   }
 }
 ```
-2. Make sure that in the `Program.cs` the string entered into the connection matches your desired connectionstring in the `appsettings.json`
+2. Make sure that in the `Program.cs` the string entered into the connection matches your desired connectionstring in the `appsettings.json`:
 3. Run update-database in the nuget console.
 
 
