@@ -17,7 +17,7 @@ The wastewatch web application functions as a software for people to select item
 -For now the application is used as a localhost, so just run WasteWatch for the application itself, or run WasteWatch API for the API.
 
 ## Contributors
--Oscar Theelen
--Menno Rompelberg
--Axel Frederiks
--Jonah Siemers
+- [Oscar Theelen](https://github.com/Ozziehman)
+- [Menno Rompelberg](https://github.com/MasterDisaster7)
+- [Axel Frederiks](https://github.com/ProgrammerGhostPrK)
+- [Jonah Siemers](https://github.com/Doomayy)
