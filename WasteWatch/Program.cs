@@ -14,7 +14,7 @@ namespace WasteWatch
 
             // Add services to the container.
 
-            var connectionString = builder.Configuration.GetConnectionString("OscarConnectionPC") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+            var connectionString = builder.Configuration.GetConnectionString("JonahConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(connectionString));
