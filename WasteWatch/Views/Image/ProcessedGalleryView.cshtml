@@ -28,7 +28,7 @@
                 <div class="col-md-4">
                     <input id="boxesFromDb_@image.Id" value="@image.Boxes" style="display:none">
                     <div class="card mb-4 shadow-sm">
-                        <img id="Image_@image.Id" class="card-img-top" src="data:image/jpeg;base64,@Convert.ToBase64String(image.ImageData)" alt="Card image cap" style="display:none">
+                        <img id="Image_@image.Id" class="card-img-top" src="data:image/jpeg;base64,@Convert.ToBase64String(image.BinaryData)" alt="Card image cap" style="display:none">
                         <canvas id="Canvas_@image.Id" width="500" height="500"></canvas>
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-center">

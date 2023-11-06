@@ -13,7 +13,7 @@
     ImageProcessed image = JsonConvert.DeserializeObject<ImageProcessed>(jsonImage);
 
     //Get the image data in bytes from the imageModel and convert it to base 64
-    var imageDataBase64 = Convert.ToBase64String(image.ImageData);
+    var imageDataBase64 = Convert.ToBase64String(image.BinaryData);
     var boxes = image.Boxes;
     var Categories = ViewData["Categories"] as List<Category>;
 }

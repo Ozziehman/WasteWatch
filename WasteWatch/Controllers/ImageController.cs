@@ -305,7 +305,7 @@ namespace WasteWatch.Controllers
                 //make new image object and put the data from imageModel into image
                 ImageProcessed imageProcessed = new ImageProcessed()
                 {
-                    ImageData = rawImageDataByte,
+                    BinaryData = rawImageDataByte,
                     Boxes = boxes,
                     BoxesYOLO = yoloFormat,
                     ProcessedBy = _userManager.GetUserAsync(User).Result
@@ -397,7 +397,7 @@ namespace WasteWatch.Controllers
                         // Create an entry in the "Images" folder for each image
                         var entry = archive.CreateEntry($"images/{image.Id}.jpg");
                         using (var entryStream = entry.Open())
-                        using (var imageStream = new MemoryStream(image.ImageData))
+                        using (var imageStream = new MemoryStream(image.BinaryData))
                         {
                             imageStream.CopyTo(entryStream);
                         }
