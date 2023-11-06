@@ -30,6 +30,7 @@ namespace WasteWatch.Data
             // Configuration for IdentityUserLogin entity because it errors otherwise
             modelBuilder.Entity<IdentityUserLogin<string>>().HasKey(u => u.UserId);
 
+
             SeedCategories(modelBuilder);
         }
 
