@@ -30,21 +30,6 @@ namespace WasteWatch.Data
             // Configuration for IdentityUserLogin entity because it errors otherwise
             modelBuilder.Entity<IdentityUserLogin<string>>().HasKey(u => u.UserId);
 
-
-            modelBuilder.Entity<ImageProcessed>()
-                .HasMany(i => i.Categories);
-
-            modelBuilder.Entity<Image>()
-                .HasOne(u => u.User)
-                .WithMany()
-                .HasForeignKey(u => u.UserId);
-
-            modelBuilder.Entity<ImageProcessed>()
-            .HasOne(ip => ip.ProcessedBy);
-
-
-
-
             SeedCategories(modelBuilder);
         }
 
