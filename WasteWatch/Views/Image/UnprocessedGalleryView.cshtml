@@ -27,19 +27,21 @@
             function showImages(start, end) {
                 for (var i = start; i < end; i++) {
                     var image = images[i];
-                    var imageElement = `
-                                <div class="col-md-4">
-                                    <div class="card mb-4 shadow-sm">
-                                        <img id="Image_${image.Id}" class="card-img-top" src="data:image/jpeg;base64,${image.BinaryData}" alt="Card image cap">
-                                        <div class="card-body">
-                                            <div class="d-flex justify-content-between align-items-center">
-                                                <label class="m-2">Id: ${image.Id}</label>
-                                            </div>
-                                        </div>
+                    if (!image.IsProcessed) {
+                        var imageElement = `
+                        <div class="col-md-4">
+                            <div class="card mb-4 shadow-sm">
+                                <img id="Image_${image.Id}" class="card-img-top" src="data:image/jpeg;base64,${image.BinaryData}" alt="Card image cap">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <label class="m-2">Id: ${image.Id}</label>
                                     </div>
                                 </div>
-                            `;
-                    $('#PageBody .row').append(imageElement);
+                            </div>
+                        </div>
+                    `;
+                        $('#PageBody .row').append(imageElement);
+                    }
                 }
             }
 

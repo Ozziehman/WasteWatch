@@ -11,7 +11,7 @@ namespace WasteWatchAPI
             var builder = WebApplication.CreateBuilder(args);
             var configuration = builder.Configuration;
 
-            var connectionString = configuration.GetConnectionString("OscarConnectionPC");
+            var connectionString = configuration.GetConnectionString("JonahConnection");
 
             // Add services to the container.
 

@@ -9,7 +9,6 @@ namespace WasteWatch.Models
         [NotMapped]
         public string? ApiBase64Data { get; set; }
         public byte[]? BinaryData { get; set; }
-
-
+        public bool IsProcessed { get; set; }
     }
 }

@@ -308,7 +308,8 @@ namespace WasteWatch.Controllers
                     BinaryData = rawImageDataByte,
                     Boxes = boxes,
                     BoxesYOLO = yoloFormat,
-                    ProcessedBy = _userManager.GetUserAsync(User).Result
+                    ProcessedBy = _userManager.GetUserAsync(User).Result,
+                    IsProcessed = true
                 };
 
                 _context.ImagesProcessed.Add(imageProcessed);
